@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Loan Application Form - Page 3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background-image: url('form_header.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section {
+            margin: 0;
+        }
+        
+        .section-header {
+            background: #2c3e50;
+            color: white;
+            padding: 12px 20px;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-number {
+            background: #d2691e;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .section-content {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #f8f8f8;
+        }
+        
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #d2691e;
+        }
+        
+        .page-indicator {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            text-align: right;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .nav-btn {
+            background: #d2691e;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-btn:hover {
+            background: #b8551a;
+        }
+
+        .download-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+        }
+        
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .info-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .info-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #d2691e;
+            font-weight: bold;
+        }
+        
+        .declaration-text {
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+        
+        .authorization-text {
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+        
+        .signature-section {
+            margin-top: 30px;
+        }
+        
+        .signature-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .signature-row label {
+            font-weight: bold;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        
+        .signature-input {
+            width: 200px;
+            padding: 5px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            background-color: #f8f8f8;
+        }
+        
+        .date-input {
+            width: 120px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            background-color: #f8f8f8;
+        }
+
+        .date-input-modern {
+            width: 150px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            background-color: #f8f8f8;
+        }
+
+        .date-input-modern:focus {
+            outline: none;
+            border-color: #d2691e;
+        }
+        
+        .signature-double-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .signature-double-row .signature-item {
+            flex: 1;
+            max-width: calc(50% - 7.5px);
+        }
+
+        .signature-double-row .signature-item label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .signature-double-row .signature-item input {
+            width: 100%;
+            padding: 5px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            background-color: #f8f8f8;
+        }
+
+        .signature-double-row .signature-section-wrapper {
+            width: 100%;
+        }
+
+        .signature-double-row .signature-canvas {
+            width: 100%;
+            max-width: 250px;
+            height: 80px;
+        }
+        
+        .year-input {
+            width: 50px;
+            padding: 5px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            background-color: #f8f8f8;
+        }
+
+        .signature-canvas {
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            cursor: crosshair;
+            display: block;
+            margin: 10px 0;
+        }
+
+        .signature-controls {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .signature-btn {
+            background: #6c757d;
+            color: white;
+            padding: 5px 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .signature-btn:hover {
+            background: #5a6268;
+        }
+
+        .signature-section-wrapper {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .form-container {
+                max-width: 100%;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            .header {
+                padding: 15px;
+                height: 100px;
+            }
+
+            .section-content {
+                padding: 15px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .checkbox-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .checkbox-item {
+                margin-bottom: 5px;
+            }
+
+            .title-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .status-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .signature-double-row {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .signature-double-row .signature-item {
+                max-width: 100%;
+            }
+
+            .signature-canvas {
+                width: 100%;
+                max-width: 100%;
+                height: 120px;
+            }
+
+            .signature-row {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .signature-input {
+                width: 150px;
+                margin: 5px 0;
+            }
+
+            .date-input {
+                width: 60px;
+                margin: 5px 0;
+            }
+
+            .year-input {
+                width: 60px;
+                margin: 5px 0;
+            }
+
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .nav-btn, .download-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .date-group {
+                flex-wrap: wrap;
+                gap: 3px;
+            }
+
+            .date-input {
+                width: 35px;
+            }
+
+            .others-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .others-title input[type="text"] {
+                width: 100%;
+            }
+
+            .signature-controls {
+                justify-content: center;
+            }
+
+            .info-list li, .documents-list li {
+                font-size: 12px;
+                line-height: 1.3;
+            }
+
+            .declaration-text, .authorization-text {
+                font-size: 11px;
+                line-height: 1.4;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                height: 80px;
+                padding: 10px;
+            }
+
+            .section-content {
+                padding: 10px;
+            }
+
+            .section-header {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+
+            .section-number {
+                width: 20px;
+                height: 20px;
+                font-size: 12px;
+            }
+
+            .signature-canvas {
+                height: 100px;
+            }
+
+            .signature-section-wrapper {
+                padding: 10px;
+            }
+
+            .form-group label {
+                font-size: 13px;
+            }
+
+            input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+                padding: 8px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="header">
+            <!-- Header content is now part of the background image -->
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">6</div>
+                <span>REQUIRED INFORMATION</span>
+            </div>
+            <div class="section-content">
+                <ul class="info-list">
+                    <li>Source of funds for the repayment of the loan (e.g. outstanding invoice from client, sale of an asset, etc.);</li>
+                    <li>Number and nature of any other current loans from other individuals or institutions;</li>
+                    <li>Previous loans payment history and references.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">7</div>
+                <span>DECLARATION</span>
+            </div>
+            <div class="section-content">
+                <div class="declaration-text">
+                    I/we declare that all the particulars and information provided in this Business Application Form are true, correct, complete and up to date in all respects; and I/we have not withheld any information whatsoever. I/we confirm that no insolvency proceedings or suit for recovery of outstanding dues or monies whatsoever and/or criminal proceedings are pending against me/us or the Company/Close Corporation/Trust or that I/we have not been made insolvent/bankrupt by any court or other authority. I/we declare that I/we have not made any payment in cash, bearer, cheque or kind along with or in connection with this Application or any other Application fees to the executive collecting my/our Application/and I/we shall not hold Qore (Proprietary) Limited liable for any such payment made by us to the executive collecting this Application. I/we understand and confirm that the Business Application Form and all other documents submitted by me/us to Qore (Proprietary) Limited shall not be returned to me/us and Qore (Proprietary) Limited shall have the right to retain the same. I/we have read this Business Application Form and are agreeable to all its terms/conditions. I/we hereby agree to abide and be bound by all applicable rules/regulations/instruction/guidelines including but not limited to those issued by any competent authority within the Republic of South Africa.
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">8</div>
+                <span>AUTHORISATION</span>
+            </div>
+            <div class="section-content">
+                <div class="authorization-text">
+                    I/We authorise Qore (Proprietary) Limited, its group of companies, its agents and its affiliates to make reference and enquiries relevant to information in this Business Application Form which either or all of them consider necessary. I/we undertake to Qore (Proprietary) Limited, its group of companies, its agents and its affiliates that all the information provided in this Business Application Form is true, correct, complete and all such information that they may require. I/we further declare and confirm that the credit facilities (if any) enjoyed by me/us with banks/financial institutions/non banking finance companies has been disclosed here in above. I/we agree that Qore (Proprietary) Limited may provide the credit facilities mentioned herein only if permitted and if approved in the manner specified or required by it. I/we confirm that I/we shall not use the credit facility (or any part thereof) for any improper, illegal or unlawful purpose/activities. I/we have been read in a language known to me/us, the contents of this Business Application Form and hereby express my/our unconditional consent to debit my/our loan instalments etc., from above mentioned account. I/we authorise my bank to honour all such instructions. I/ we authorize the representative of the business to get this mandate verified and registered with bank.
+                </div>
+
+                <div class="signature-section">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Signed in (City)</label>
+                            <input type="text" class="signature-input" placeholder="Enter city">
+                        </div>
+                        <div class="form-group">
+                            <label>Date signed</label>
+                            <input type="date" class="date-input-modern" name="signature_date_1">
+                        </div>
+                    </div>
+
+                    <div class="signature-section-wrapper">
+                        <label>Signature of Authorised Signatory</label>
+                        <canvas id="signature1" class="signature-canvas" width="400" height="100"></canvas>
+                        <div class="signature-controls">
+                            <button type="button" class="signature-btn" onclick="clearSignature('signature1')">Clear</button>
+                            <button type="button" class="signature-btn" onclick="saveSignature('signature1')">Save</button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Co-Applicants signed in (City)</label>
+                            <input type="text" class="signature-input" placeholder="Enter city">
+                        </div>
+                        <div class="form-group">
+                            <label>Date signed</label>
+                            <input type="date" class="date-input-modern" name="signature_date_2">
+                        </div>
+                    </div>
+
+                    <div class="signature-double-row">
+                        <div class="signature-item">
+                            <div class="signature-section-wrapper">
+                                <label>Signature of Co-Applicant 1</label>
+                                <canvas id="signature2" class="signature-canvas" width="250" height="80"></canvas>
+                                <div class="signature-controls">
+                                    <button type="button" class="signature-btn" onclick="clearSignature('signature2')">Clear</button>
+                                    <button type="button" class="signature-btn" onclick="saveSignature('signature2')">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="signature-item">
+                            <div class="signature-section-wrapper">
+                                <label>Signature of Co-Applicant 2</label>
+                                <canvas id="signature3" class="signature-canvas" width="250" height="80"></canvas>
+                                <div class="signature-controls">
+                                    <button type="button" class="signature-btn" onclick="clearSignature('signature3')">Clear</button>
+                                    <button type="button" class="signature-btn" onclick="saveSignature('signature3')">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="business-loan-form-page2.html" class="nav-btn">← Previous</a>
+            <button class="download-btn" onclick="downloadPDF()">Download Application</button>
+        </div>
+
+        <div class="page-indicator">
+            3/3
+        </div>
+
+        <!-- Include jsPDF library -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+        <script>
+        function downloadPDF() {
+            // Save current page data first
+            saveCurrentPageData();
+
+            // Get form data from all pages (stored in localStorage)
+            const formData = getFormData();
+
+            // Create new PDF document
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Convert header image to base64 and add to PDF
+            convertImageToBase64('form_header.png', function(base64Image) {
+                // Add header image to first page
+                addHeaderImageToPDF(doc, base64Image);
+
+                // Add all form content across multiple pages
+                addCompleteFormContentToPDF(doc, formData, base64Image);
+
+                // Save the PDF
+                doc.save('Qore_Business_Loan_Application.pdf');
+
+                // Show confirmation message
+                alert('Your application has been downloaded as a PDF. Please email the completed form to: applications@qore.co.za');
+            });
+        }
+
+        function getFormData() {
+            // Get comprehensive data from localStorage
+            const savedData = localStorage.getItem('qoreFormData');
+            if (savedData) {
+                return JSON.parse(savedData);
+            }
+
+            // If no saved data, return empty object with default structure
+            return {
+                // Page 1 fields
+                loan_purpose: '',
+                others_specify: '',
+                loan_amount: '',
+                loan_period: '',
+                business_name: '',
+                entity_type: '',
+                incorporation_date: '',
+                registration_number: '',
+                business_sector: '',
+                office_address: '',
+                province: '',
+                city: '',
+                postcode: '',
+                landline: '',
+                mobile: '',
+                business_email: '',
+
+                // Page 2 fields
+                title: '',
+                full_name: '',
+                date_of_birth: '',
+                identity_number: '',
+                status: '',
+                nationality: '',
+                designation: '',
+                personal_landline: '',
+                personal_mobile: '',
+                personal_email: '',
+                bank_name: '',
+                branch_name: '',
+                branch_code: '',
+                account_holder: '',
+                account_number: '',
+                account_type: ''
+            };
+        }
+
+        function convertImageToBase64(imagePath, callback) {
+            // For local file system, use CSS-based header instead of image
+            console.warn('Using CSS fallback header due to CORS restrictions');
+            callback(null);
+        }
+
+        function addHeaderImageToPDF(doc, base64Image) {
+            // Professional header design that matches the website
+            // Orange gradient background
+            doc.setFillColor(210, 105, 30);
+            doc.rect(0, 0, 210, 30, 'F');
+
+            // Add gradient effect with lighter orange
+            doc.setFillColor(255, 107, 53);
+            doc.rect(0, 0, 210, 15, 'F');
+
+            // White text
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text('Business loan', 20, 12);
+            doc.setFontSize(20);
+            doc.text('APPLICATION FORM', 20, 24);
+
+            // Qore logo
+            doc.setFontSize(18);
+            doc.setFont(undefined, 'bold');
+            doc.text('qore', 170, 18);
+        }
+
+        function addCompleteFormContentToPDF(doc, formData, base64Image) {
+            // PAGE 1 CONTENT
+            addPage1Content(doc, formData);
+
+            // PAGE 2 CONTENT
+            doc.addPage();
+            addHeaderImageToPDF(doc, base64Image); // Re-add header to new page
+            addPage2Content(doc, formData);
+
+            // PAGE 3 CONTENT
+            doc.addPage();
+            addHeaderImageToPDF(doc, base64Image); // Re-add header to new page
+            addPage3Content(doc, formData);
+        }
+
+        function addPage1Content(doc, formData) {
+            let yPosition = 40;
+
+            // Section 1: Reason for Loan
+            yPosition = addSectionHeader(doc, yPosition, '1', 'REASON FOR LOAN');
+
+            doc.setTextColor(0, 0, 0);
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(10);
+
+            doc.text('Purpose of loan:', 15, yPosition);
+            yPosition += 8;
+            doc.text('☐ Invoice Discounting  ☐ Payroll Funding  ☐ Expansion Finance', 20, yPosition);
+            yPosition += 6;
+            doc.text('☐ Bridging Finance  ☐ Purchase Order Finance  ☐ Equipment Acquisition Finance', 20, yPosition);
+            yPosition += 6;
+            doc.text('☐ Project Finance  ☐ Others: ' + (formData.others_specify || '________________'), 20, yPosition);
+            yPosition += 6;
+            doc.text('Selected: ' + (formData.loan_purpose || '_________________'), 20, yPosition);
+
+            yPosition += 15;
+            doc.text('Loan amount: ' + (formData.loan_amount || '_________________'), 15, yPosition);
+            yPosition += 10;
+            doc.text('Loan period (not exceeding 60 days): ' + (formData.loan_period || '_________________'), 15, yPosition);
+
+            // Section 2: Business Details
+            yPosition += 20;
+            yPosition = addSectionHeader(doc, yPosition, '2', 'BUSINESS DETAILS');
+
+            doc.text('Business name: ' + (formData.business_name || '_________________'), 15, yPosition);
+            yPosition += 10;
+
+            doc.text('Entity type:', 15, yPosition);
+            yPosition += 8;
+            doc.text('☐ Close Corporation  ☐ Private Company  ☐ Trust  ☐ Joint Venture', 20, yPosition);
+            yPosition += 6;
+            doc.text('Selected: ' + (formData.entity_type || '_________________'), 20, yPosition);
+
+            yPosition += 15;
+            doc.text('Date of incorporation: ' + (formData.incorporation_date || 'DD/MM/YYYY'), 15, yPosition);
+            yPosition += 10;
+            doc.text('Registration number: ' + (formData.registration_number || '_________________'), 15, yPosition);
+            yPosition += 10;
+
+            doc.text('Business sector:', 15, yPosition);
+            yPosition += 8;
+            doc.text('☐ Manufacturing  ☐ Retail  ☐ Services  ☐ Consulting', 20, yPosition);
+            yPosition += 6;
+            doc.text('☐ Hospitality  ☐ Logistics  ☐ Others: ________________', 20, yPosition);
+            yPosition += 6;
+            doc.text('Selected: ' + (formData.business_sector || '_________________'), 20, yPosition);
+
+            yPosition += 15;
+            doc.text('Office address: ' + (formData.office_address || '_________________'), 15, yPosition);
+            yPosition += 10;
+            doc.text('Province: ' + (formData.province || '________') + '  City: ' + (formData.city || '________') + '  Postcode: ' + (formData.postcode || '________'), 15, yPosition);
+            yPosition += 10;
+            doc.text('Landline: ' + (formData.landline || '________') + '  Mobile: ' + (formData.mobile || '________'), 15, yPosition);
+            yPosition += 10;
+            doc.text('Email address: ' + (formData.business_email || '_________________'), 15, yPosition);
+
+            // Page number for Page 1
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'bold');
+            doc.text('1 of 3', 185, 285);
+        }
+
+        function addPage2Content(doc, formData) {
+            let yPosition = 40;
+
+            // Section 3: Personal Information
+            yPosition = addSectionHeader(doc, yPosition, '3', 'PERSONAL INFORMATION');
+
+            doc.text('Title:', 15, yPosition);
+            yPosition += 8;
+
+            // Show checkboxes with proper selection
+            const titles = ['Mr.', 'Miss', 'Mrs.', 'Dr', 'Prof.'];
+            let titleText = '';
+            titles.forEach(title => {
+                const isSelected = formData.title === title;
+                titleText += (isSelected ? '☑' : '☐') + ' ' + title + '  ';
+            });
+            titleText += '☐ Others: ________';
+            doc.text(titleText, 20, yPosition);
+            yPosition += 6;
+
+            yPosition += 15;
+            doc.text('Full names and surname: ' + (formData.full_name || '_________________'), 15, yPosition);
+            yPosition += 10;
+
+            // Format date properly
+            let dobText = formData.date_of_birth || 'DD/MM/YYYY';
+            if (formData.date_of_birth && formData.date_of_birth.includes('-')) {
+                // Convert from YYYY-MM-DD to DD/MM/YYYY
+                const parts = formData.date_of_birth.split('-');
+                dobText = parts[2] + '/' + parts[1] + '/' + parts[0];
+            }
+
+            doc.text('Date of birth: ' + dobText + '  Identity number: ' + (formData.identity_number || '_________________'), 15, yPosition);
+            yPosition += 10;
+
+            doc.text('Status:', 15, yPosition);
+            yPosition += 8;
+
+            // Show status checkboxes with proper selection
+            const statuses = ['Single', 'Married', 'Divorced', 'Other'];
+            let statusText = '';
+            statuses.forEach(status => {
+                const isSelected = formData.status === status;
+                statusText += (isSelected ? '☑' : '☐') + ' ' + status + '  ';
+            });
+            doc.text(statusText, 20, yPosition);
+            yPosition += 6;
+
+            yPosition += 15;
+            doc.text('Nationality: ' + (formData.nationality || '________') + '  Designation/position: ' + (formData.designation || '________'), 15, yPosition);
+            yPosition += 10;
+            doc.text('Landline: ' + (formData.personal_landline || '________') + '  Mobile: ' + (formData.personal_mobile || '________'), 15, yPosition);
+            yPosition += 10;
+            doc.text('E-mail address: ' + (formData.personal_email || '_________________'), 15, yPosition);
+
+            // Section 4: Business Banking Details
+            yPosition += 20;
+            yPosition = addSectionHeader(doc, yPosition, '4', 'BUSINESS BANKING DETAILS');
+
+            doc.text('Bank name: ' + (formData.bank_name || '_________________'), 15, yPosition);
+            yPosition += 10;
+            doc.text('Branch name: ' + (formData.branch_name || '________') + '  Branch code: ' + (formData.branch_code || '________'), 15, yPosition);
+            yPosition += 10;
+            doc.text('Account holder: ' + (formData.account_holder || '_________________'), 15, yPosition);
+            yPosition += 10;
+            doc.text('Account number: ' + (formData.account_number || '________') + '  Account type: ' + (formData.account_type || '________'), 15, yPosition);
+
+            // Section 5: Statutory Documents
+            yPosition += 20;
+            yPosition = addSectionHeader(doc, yPosition, '5', 'STATUTORY DOCUMENTS');
+
+            const documents = [
+                'Business registration documents from CIPC in the case of a Company or Close Corporation;',
+                'Trust Deed and Letters of Authority in the case of a Trust;',
+                'Identity documents of all directors and shareholders in the case of a Company;',
+                'Identity documents of all members in the case of a Close Corporation;',
+                'Identity documents of all Trustees and Beneficiaries in the case of a Trust;',
+                'Company/Close Corporation/Trust bank statements for the past 3 months;',
+                'Directors, Shareholders, Members, Trustees and Beneficiary personal bank statements for the past 3 months;',
+                'Proof of address for the Company, Close Corporation or Trust;',
+                'Proof of address for each Director, Shareholder, Member, Trustee and Beneficiary.'
+            ];
+
+            documents.forEach(doc_item => {
+                doc.text('• ' + doc_item, 15, yPosition);
+                yPosition += 8;
+            });
+
+            // Page number for Page 2
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'bold');
+            doc.text('2 of 3', 185, 285);
+        }
+
+        function addPage3Content(doc, formData) {
+            let yPosition = 40;
+
+            // Section 6: Required Information
+            yPosition = addSectionHeader(doc, yPosition, '6', 'REQUIRED INFORMATION');
+
+            const requirements = [
+                'Source of funds for the repayment of the loan (e.g. outstanding invoice from client, sale of an asset, etc.);',
+                'Number and nature of any other current loans from other individuals or institutions;',
+                'Previous loans payment history and references.'
+            ];
+
+            requirements.forEach(req => {
+                doc.text('• ' + req, 15, yPosition);
+                yPosition += 12;
+            });
+
+            // Section 7: Declaration
+            yPosition += 10;
+            yPosition = addSectionHeader(doc, yPosition, '7', 'DECLARATION');
+
+            const declarationText = 'I/we declare that all the particulars and information provided in this Business Application Form are true, correct, complete and up to date in all respects; and I/we have not withheld any information whatsoever. I/we confirm that no insolvency proceedings or suit for recovery of outstanding dues or monies whatsoever and/or criminal proceedings are pending against me/us or the Company/Close Corporation/Trust or that I/we have not been made insolvent/bankrupt by any court or other authority.';
+
+            const splitText = doc.splitTextToSize(declarationText, 180);
+            doc.text(splitText, 15, yPosition);
+            yPosition += splitText.length * 5 + 10;
+
+            // Section 8: Authorization
+            yPosition = addSectionHeader(doc, yPosition, '8', 'AUTHORISATION');
+
+            const authText = 'I/We authorise Qore (Proprietary) Limited, its group of companies, its agents and its affiliates to make reference and enquiries relevant to information in this Business Application Form which either or all of them consider necessary.';
+
+            const splitAuthText = doc.splitTextToSize(authText, 180);
+            doc.text(splitAuthText, 15, yPosition);
+            yPosition += splitAuthText.length * 5 + 20;
+
+            // Signature fields
+            doc.text('Signed in: ________________ on this _______ of ________________ 20____', 15, yPosition);
+            yPosition += 15;
+
+            // Add signature image if available
+            if (formData.signature1_signature) {
+                doc.text('Signature of Authorised Signatory:', 15, yPosition);
+                yPosition += 5;
+                try {
+                    doc.addImage(formData.signature1_signature, 'PNG', 15, yPosition, 80, 20);
+                    yPosition += 25;
+                } catch (e) {
+                    doc.text('Signature of Authorised Signatory: [Digital signature saved]', 15, yPosition);
+                    yPosition += 15;
+                }
+            } else {
+                doc.text('Signature of Authorised Signatory: _________________________________', 15, yPosition);
+                yPosition += 15;
+            }
+
+            doc.text('Signed in: ________________ on this _______ of ________________ 20____', 15, yPosition);
+            yPosition += 15;
+
+            // Co-applicant signatures
+            doc.text('Signature of Co-Applicant 1:', 15, yPosition);
+            if (formData.signature2_signature) {
+                yPosition += 5;
+                try {
+                    doc.addImage(formData.signature2_signature, 'PNG', 15, yPosition, 60, 15);
+                } catch (e) {
+                    doc.text('[Digital signature saved]', 80, yPosition - 5);
+                }
+            } else {
+                doc.text(' ________________', 80, yPosition);
+            }
+
+            doc.text('Signature of Co-Applicant 2:', 120, yPosition);
+            if (formData.signature3_signature) {
+                try {
+                    doc.addImage(formData.signature3_signature, 'PNG', 170, yPosition + 5, 60, 15);
+                } catch (e) {
+                    doc.text('[Digital signature saved]', 180, yPosition);
+                }
+            } else {
+                doc.text(' ________________', 180, yPosition);
+            }
+
+            // Page number
+            yPosition = 285;
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'bold');
+            doc.text('3 of 3', 185, yPosition);
+        }
+
+        function addSectionHeader(doc, yPosition, number, title) {
+            // Section header background
+            doc.setFillColor(44, 62, 80);
+            doc.rect(10, yPosition, 190, 10, 'F');
+
+            // Section number circle
+            doc.setFillColor(210, 105, 30);
+            doc.circle(20, yPosition + 5, 3, 'F');
+
+            // Section text
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            doc.text(number, 18.5, yPosition + 7);
+            doc.text(title, 30, yPosition + 7);
+
+            // Reset text color
+            doc.setTextColor(0, 0, 0);
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(10);
+
+            return yPosition + 20;
+        }
+
+        // Signature functionality
+        let signaturePads = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSignaturePads();
+        });
+
+        function initializeSignaturePads() {
+            const canvases = document.querySelectorAll('.signature-canvas');
+            canvases.forEach(canvas => {
+                const ctx = canvas.getContext('2d');
+                let isDrawing = false;
+                let lastX = 0;
+                let lastY = 0;
+
+                // Set up canvas
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                // Mouse events
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', stopDrawing);
+                canvas.addEventListener('mouseout', stopDrawing);
+
+                // Touch events for mobile
+                canvas.addEventListener('touchstart', handleTouch);
+                canvas.addEventListener('touchmove', handleTouch);
+                canvas.addEventListener('touchend', stopDrawing);
+
+                function startDrawing(e) {
+                    isDrawing = true;
+                    const rect = canvas.getBoundingClientRect();
+                    lastX = e.clientX - rect.left;
+                    lastY = e.clientY - rect.top;
+                }
+
+                function draw(e) {
+                    if (!isDrawing) return;
+
+                    const rect = canvas.getBoundingClientRect();
+                    const currentX = e.clientX - rect.left;
+                    const currentY = e.clientY - rect.top;
+
+                    ctx.beginPath();
+                    ctx.moveTo(lastX, lastY);
+                    ctx.lineTo(currentX, currentY);
+                    ctx.stroke();
+
+                    lastX = currentX;
+                    lastY = currentY;
+                }
+
+                function stopDrawing() {
+                    isDrawing = false;
+                }
+
+                function handleTouch(e) {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+
+                    if (e.type === 'touchstart') {
+                        startDrawing({
+                            clientX: touch.clientX,
+                            clientY: touch.clientY
+                        });
+                    } else if (e.type === 'touchmove') {
+                        draw({
+                            clientX: touch.clientX,
+                            clientY: touch.clientY
+                        });
+                    } else if (e.type === 'touchend') {
+                        stopDrawing();
+                    }
+                }
+
+                signaturePads[canvas.id] = {
+                    canvas: canvas,
+                    ctx: ctx
+                };
+            });
+        }
+
+        function clearSignature(canvasId) {
+            const pad = signaturePads[canvasId];
+            if (pad) {
+                pad.ctx.clearRect(0, 0, pad.canvas.width, pad.canvas.height);
+            }
+        }
+
+        function saveSignature(canvasId) {
+            const pad = signaturePads[canvasId];
+            if (pad) {
+                const dataURL = pad.canvas.toDataURL();
+                // Save signature to localStorage
+                const existingData = JSON.parse(localStorage.getItem('qoreFormData') || '{}');
+                existingData[canvasId + '_signature'] = dataURL;
+                localStorage.setItem('qoreFormData', JSON.stringify(existingData));
+
+                alert('Signature saved successfully!');
+            }
+        }
+
+        function saveCurrentPageData() {
+            // Save any data from current page (Page 3) that might not be auto-saved
+            const existingData = JSON.parse(localStorage.getItem('qoreFormData') || '{}');
+
+            // Get signature date fields
+            const signatureDate1 = document.querySelector('input[name="signature_date_1"]')?.value || '';
+            const signatureDate2 = document.querySelector('input[name="signature_date_2"]')?.value || '';
+            const signedCity1 = document.querySelectorAll('.signature-input')[0]?.value || '';
+            const signedCity2 = document.querySelectorAll('.signature-input')[1]?.value || '';
+
+            const updatedData = {
+                ...existingData,
+                signature_date_1: signatureDate1,
+                signature_date_2: signatureDate2,
+                signed_city_1: signedCity1,
+                signed_city_2: signedCity2
+            };
+
+            localStorage.setItem('qoreFormData', JSON.stringify(updatedData));
+        }
+        </script>
+    </div>
+</body>
+</html>
