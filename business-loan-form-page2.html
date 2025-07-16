@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Loan Application Form - Page 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background-image: url('form_header.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section {
+            margin: 0;
+        }
+        
+        .section-header {
+            background: #2c3e50;
+            color: white;
+            padding: 12px 20px;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-number {
+            background: #d2691e;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .section-content {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input[type="radio"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 13px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #f8f8f8;
+        }
+        
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #d2691e;
+        }
+        
+        .date-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .date-input-modern {
+            width: 150px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #f8f8f8;
+        }
+
+        .date-input-modern:focus {
+            outline: none;
+            border-color: #d2691e;
+        }
+
+        .date-label {
+            font-size: 12px;
+            color: #666;
+            margin: 0 5px;
+            font-weight: bold;
+        }
+
+        .date-separator {
+            font-size: 14px;
+            color: #666;
+            margin: 0 5px;
+        }
+        
+        .others-input {
+            margin-top: 10px;
+        }
+        
+        .page-indicator {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            text-align: right;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .nav-btn {
+            background: #d2691e;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-btn:hover {
+            background: #b8551a;
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .continue-btn {
+            background: #d2691e;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 20px;
+        }
+
+        .continue-btn:hover {
+            background: #b8551a;
+        }
+        
+        .documents-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .documents-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .documents-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #d2691e;
+            font-weight: bold;
+        }
+        
+        .title-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .title-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .title-option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .title-option label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 13px;
+        }
+        
+        .others-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .others-title input[type="text"] {
+            width: 80px;
+            padding: 5px;
+        }
+        
+        .status-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .status-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .status-option label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 13px;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .form-container {
+                max-width: 100%;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            .header {
+                padding: 15px;
+                height: 100px;
+            }
+
+            .section-content {
+                padding: 15px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .checkbox-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .checkbox-item {
+                margin-bottom: 5px;
+            }
+
+            .title-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .status-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .nav-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .date-group {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .date-input-modern {
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .others-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .others-title input[type="text"] {
+                width: 100%;
+            }
+
+            .documents-list li {
+                font-size: 12px;
+                line-height: 1.3;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                height: 80px;
+                padding: 10px;
+            }
+
+            .section-content {
+                padding: 10px;
+            }
+
+            .section-header {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+
+            .section-number {
+                width: 20px;
+                height: 20px;
+                font-size: 12px;
+            }
+
+            .form-group label {
+                font-size: 13px;
+            }
+
+            input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+                padding: 8px;
+                font-size: 13px;
+            }
+
+            .checkbox-item label, .title-option label, .status-option label {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="header">
+            <!-- Header content is now part of the background image -->
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <span>PERSONAL INFORMATION</span>
+            </div>
+            <div class="section-content">
+                <div class="form-group">
+                    <label>Title</label>
+                    <div class="title-group">
+                        <div class="title-option">
+                            <input type="radio" id="mr" name="title">
+                            <label for="mr">Mr.</label>
+                        </div>
+                        <div class="title-option">
+                            <input type="radio" id="miss" name="title">
+                            <label for="miss">Miss</label>
+                        </div>
+                        <div class="title-option">
+                            <input type="radio" id="mrs" name="title">
+                            <label for="mrs">Mrs.</label>
+                        </div>
+                        <div class="title-option">
+                            <input type="radio" id="dr" name="title">
+                            <label for="dr">Dr</label>
+                        </div>
+                        <div class="title-option">
+                            <input type="radio" id="prof" name="title">
+                            <label for="prof">Prof.</label>
+                        </div>
+                        <div class="others-title">
+                            <input type="radio" id="others-title" name="title">
+                            <label for="others-title">Others:</label>
+                            <input type="text" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Full names and surname</label>
+                    <input type="text" placeholder="">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date of birth</label>
+                        <div class="date-group">
+                            <input type="date" class="date-input-modern" id="date_of_birth" name="date_of_birth">
+                            <span class="date-label">(DD/MM/YYYY)</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Identity number</label>
+                        <input type="text" placeholder="" id="identity_number" name="identity_number">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Status</label>
+                    <div class="status-group">
+                        <div class="status-option">
+                            <input type="radio" id="single" name="status">
+                            <label for="single">Single</label>
+                        </div>
+                        <div class="status-option">
+                            <input type="radio" id="married" name="status">
+                            <label for="married">Married</label>
+                        </div>
+                        <div class="status-option">
+                            <input type="radio" id="divorced" name="status">
+                            <label for="divorced">Divorced</label>
+                        </div>
+                        <div class="status-option">
+                            <input type="radio" id="other-status" name="status">
+                            <label for="other-status">Other</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nationality</label>
+                        <input type="text" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>Designation/position</label>
+                        <input type="text" placeholder="">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Landline</label>
+                        <input type="tel" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>Mobile</label>
+                        <input type="tel" placeholder="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>E-mail address</label>
+                    <input type="email" placeholder="">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <span>BUSINESS BANKING DETAILS</span>
+            </div>
+            <div class="section-content">
+                <div class="form-group">
+                    <label>Bank name</label>
+                    <input type="text" placeholder="">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Branch name</label>
+                        <input type="text" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>Branch code</label>
+                        <input type="text" placeholder="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Account holder</label>
+                    <input type="text" placeholder="">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Account number</label>
+                        <input type="text" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>Account type</label>
+                        <input type="text" placeholder="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">5</div>
+                <span>STATUTORY DOCUMENTS</span>
+            </div>
+            <div class="section-content">
+                <ul class="documents-list">
+                    <li>Business registration documents from CIPC in the case of a Company or Close Corporation;</li>
+                    <li>Trust Deed and Letters of Authority in the case of a Trust;</li>
+                    <li>Identity documents of all directors and shareholders in the case of a Company;</li>
+                    <li>Identity documents of all members in the case of a Close Corporation;</li>
+                    <li>Identity documents of all Trustees and Beneficiaries in the case of a Trust;</li>
+                    <li>Company/Close Corporation/Trust bank statements for the past 3 months;</li>
+                    <li>Directors, Shareholders, Members, Trustees and Beneficiary personal bank statements for the past 3 months;</li>
+                    <li>Proof of address for the Company, Close Corporation or Trust;</li>
+                    <li>Proof of address for each Director, Shareholder, Member, Trustee and Beneficiary.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="business-loan-form.html" class="nav-btn">← Previous</a>
+            <a href="business-loan-form-page3.html" class="nav-btn">Next →</a>
+        </div>
+
+        <div class="page-indicator">
+            2/3
+        </div>
+    </div>
+
+    <script>
+    // Save form data when user makes changes
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.form-container');
+
+        // Load existing data
+        loadFormData();
+
+        // Save data on input changes
+        form.addEventListener('change', saveFormData);
+        form.addEventListener('input', saveFormData);
+    });
+
+    function saveFormData() {
+        const existingData = JSON.parse(localStorage.getItem('qoreFormData') || '{}');
+
+        const formData = {
+            ...existingData,
+            // Page 2 data - collect by specific selectors
+            title: document.querySelector('input[name="title"]:checked')?.nextElementSibling?.textContent?.trim() || '',
+            full_name: document.querySelector('input[type="text"]')?.value || '',
+            date_of_birth: document.querySelector('#date_of_birth')?.value || '',
+            identity_number: document.querySelector('#identity_number')?.value || '',
+            status: document.querySelector('input[name="status"]:checked')?.nextElementSibling?.textContent?.trim() || '',
+            nationality: document.querySelectorAll('input[type="text"]')[2]?.value || '',
+            designation: document.querySelectorAll('input[type="text"]')[3]?.value || '',
+            personal_landline: document.querySelectorAll('input[type="tel"]')[0]?.value || '',
+            personal_mobile: document.querySelectorAll('input[type="tel"]')[1]?.value || '',
+            personal_email: document.querySelector('input[type="email"]')?.value || '',
+            bank_name: document.querySelectorAll('input[type="text"]')[4]?.value || '',
+            branch_name: document.querySelectorAll('input[type="text"]')[5]?.value || '',
+            branch_code: document.querySelectorAll('input[type="text"]')[6]?.value || '',
+            account_holder: document.querySelectorAll('input[type="text"]')[7]?.value || '',
+            account_number: document.querySelectorAll('input[type="text"]')[8]?.value || '',
+            account_type: document.querySelectorAll('input[type="text"]')[9]?.value || ''
+        };
+
+        localStorage.setItem('qoreFormData', JSON.stringify(formData));
+    }
+
+    // Validation functions
+    function validatePhoneNumber(input) {
+        const value = input.value.replace(/\D/g, ''); // Remove non-digits
+        if (value.length > 0 && value.length !== 10) {
+            input.setCustomValidity('Mobile number must be exactly 10 digits');
+            input.style.borderColor = '#dc3545';
+        } else {
+            input.setCustomValidity('');
+            input.style.borderColor = '#ddd';
+        }
+    }
+
+    function validateIDNumber(input) {
+        const value = input.value.replace(/\D/g, ''); // Remove non-digits
+        if (value.length > 0 && value.length !== 13) {
+            input.setCustomValidity('ID number must be exactly 13 digits');
+            input.style.borderColor = '#dc3545';
+        } else {
+            input.setCustomValidity('');
+            input.style.borderColor = '#ddd';
+        }
+    }
+
+    // Add event listeners for validation
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find mobile number inputs and add validation
+        const mobileInputs = document.querySelectorAll('input[type="tel"]');
+        mobileInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                // Only allow digits
+                this.value = this.value.replace(/\D/g, '');
+                validatePhoneNumber(this);
+            });
+
+            input.addEventListener('blur', function() {
+                validatePhoneNumber(this);
+            });
+        });
+
+        // Find ID number input and add validation
+        const idInput = document.querySelector('#identity_number');
+        if (idInput) {
+            idInput.addEventListener('input', function() {
+                // Only allow digits
+                this.value = this.value.replace(/\D/g, '');
+                validateIDNumber(this);
+            });
+
+            idInput.addEventListener('blur', function() {
+                validateIDNumber(this);
+            });
+        }
+    });
+
+    function loadFormData() {
+        const savedData = JSON.parse(localStorage.getItem('qoreFormData') || '{}');
+
+        // Load radio button selections
+        if (savedData.title) {
+            const titleInputs = document.querySelectorAll('input[name="title"]');
+            titleInputs.forEach(input => {
+                if (input.nextElementSibling.textContent === savedData.title) {
+                    input.checked = true;
+                }
+            });
+        }
+
+        if (savedData.status) {
+            const statusInputs = document.querySelectorAll('input[name="status"]');
+            statusInputs.forEach(input => {
+                if (input.nextElementSibling.textContent === savedData.status) {
+                    input.checked = true;
+                }
+            });
+        }
+
+        // Load text inputs
+        const inputs = document.querySelectorAll('input[placeholder=""]');
+        const values = [
+            savedData.full_name, savedData.identity_number, savedData.nationality,
+            savedData.designation, savedData.personal_landline, savedData.personal_mobile,
+            savedData.personal_email, savedData.bank_name, savedData.branch_name,
+            savedData.branch_code, savedData.account_holder, savedData.account_number,
+            savedData.account_type
+        ];
+
+        inputs.forEach((input, index) => {
+            if (values[index]) {
+                input.value = values[index];
+            }
+        });
+    }
+    </script>
+</body>
+</html>
