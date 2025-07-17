@@ -414,6 +414,46 @@
                 font-size: 12px;
             }
         }
+
+        /* Validation styles */
+        .validation-summary {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .validation-summary.show {
+            display: block;
+        }
+
+        .validation-summary h4 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+
+        .validation-summary ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .validation-summary li {
+            margin-bottom: 5px;
+        }
+
+        .required-field {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+        }
+
+        .required-label::after {
+            content: " *";
+            color: #dc3545;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -430,33 +470,17 @@
             <div class="section-content">
                 <div class="form-group">
                     <label>Title</label>
-                    <div class="title-group">
-                        <div class="title-option">
-                            <input type="radio" id="mr" name="title">
-                            <label for="mr">Mr.</label>
-                        </div>
-                        <div class="title-option">
-                            <input type="radio" id="miss" name="title">
-                            <label for="miss">Miss</label>
-                        </div>
-                        <div class="title-option">
-                            <input type="radio" id="mrs" name="title">
-                            <label for="mrs">Mrs.</label>
-                        </div>
-                        <div class="title-option">
-                            <input type="radio" id="dr" name="title">
-                            <label for="dr">Dr</label>
-                        </div>
-                        <div class="title-option">
-                            <input type="radio" id="prof" name="title">
-                            <label for="prof">Prof.</label>
-                        </div>
-                        <div class="others-title">
-                            <input type="radio" id="others-title" name="title">
-                            <label for="others-title">Others:</label>
-                            <input type="text" placeholder="">
-                        </div>
-                    </div>
+                    <select name="title" id="title" required>
+                        <option value="">-- Select title --</option>
+                        <option value="Mr.">Mr.</option>
+                        <option value="Miss">Miss</option>
+                        <option value="Mrs.">Mrs.</option>
+                        <option value="Ms.">Ms.</option>
+                        <option value="Dr.">Dr.</option>
+                        <option value="Prof.">Prof.</option>
+                        <option value="Rev.">Rev.</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -480,24 +504,15 @@
 
                 <div class="form-group">
                     <label>Status</label>
-                    <div class="status-group">
-                        <div class="status-option">
-                            <input type="radio" id="single" name="status">
-                            <label for="single">Single</label>
-                        </div>
-                        <div class="status-option">
-                            <input type="radio" id="married" name="status">
-                            <label for="married">Married</label>
-                        </div>
-                        <div class="status-option">
-                            <input type="radio" id="divorced" name="status">
-                            <label for="divorced">Divorced</label>
-                        </div>
-                        <div class="status-option">
-                            <input type="radio" id="other-status" name="status">
-                            <label for="other-status">Other</label>
-                        </div>
-                    </div>
+                    <select name="status" id="status" required>
+                        <option value="">-- Select marital status --</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Widowed">Widowed</option>
+                        <option value="Separated">Separated</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
 
                 <div class="form-row">
@@ -610,6 +625,18 @@
         // Save data on input changes
         form.addEventListener('change', saveFormData);
         form.addEventListener('input', saveFormData);
+
+        // Add validation summary to the page
+        const validationSummary = document.createElement('div');
+        validationSummary.className = 'validation-summary';
+        validationSummary.innerHTML = '<h4>Please correct the following errors:</h4><ul></ul>';
+        form.insertBefore(validationSummary, form.querySelector('.navigation-buttons'));
+
+        // Mark required fields
+        markRequiredFields();
+
+        // Add validation to the Next button
+        setupNextButtonValidation();
     });
 
     function saveFormData() {
@@ -617,26 +644,45 @@
 
         const formData = {
             ...existingData,
-            // Page 2 data - collect by specific selectors
-            title: document.querySelector('input[name="title"]:checked')?.nextElementSibling?.textContent?.trim() || '',
-            full_name: document.querySelector('input[type="text"]')?.value || '',
-            date_of_birth: document.querySelector('#date_of_birth')?.value || '',
-            identity_number: document.querySelector('#identity_number')?.value || '',
-            status: document.querySelector('input[name="status"]:checked')?.nextElementSibling?.textContent?.trim() || '',
-            nationality: document.querySelectorAll('input[type="text"]')[2]?.value || '',
-            designation: document.querySelectorAll('input[type="text"]')[3]?.value || '',
-            personal_landline: document.querySelectorAll('input[type="tel"]')[0]?.value || '',
-            personal_mobile: document.querySelectorAll('input[type="tel"]')[1]?.value || '',
-            personal_email: document.querySelector('input[type="email"]')?.value || '',
-            bank_name: document.querySelectorAll('input[type="text"]')[4]?.value || '',
-            branch_name: document.querySelectorAll('input[type="text"]')[5]?.value || '',
-            branch_code: document.querySelectorAll('input[type="text"]')[6]?.value || '',
-            account_holder: document.querySelectorAll('input[type="text"]')[7]?.value || '',
-            account_number: document.querySelectorAll('input[type="text"]')[8]?.value || '',
-            account_type: document.querySelectorAll('input[type="text"]')[9]?.value || ''
+            // Page 2 data - collect by specific selectors with null prevention
+            title: sanitizeValue(document.querySelector('select[name="title"]')?.value),
+            full_name: sanitizeValue(document.querySelector('input[type="text"]')?.value),
+            date_of_birth: sanitizeValue(document.querySelector('#date_of_birth')?.value),
+            identity_number: sanitizeValue(document.querySelector('#identity_number')?.value),
+            status: sanitizeValue(document.querySelector('select[name="status"]')?.value),
+            nationality: sanitizeValue(document.querySelectorAll('input[type="text"]')[1]?.value),
+            designation: sanitizeValue(document.querySelectorAll('input[type="text"]')[2]?.value),
+            personal_landline: sanitizeValue(document.querySelectorAll('input[type="tel"]')[0]?.value),
+            personal_mobile: sanitizeValue(document.querySelectorAll('input[type="tel"]')[1]?.value),
+            personal_email: sanitizeValue(document.querySelector('input[type="email"]')?.value),
+            bank_name: sanitizeValue(document.querySelectorAll('input[type="text"]')[3]?.value),
+            branch_name: sanitizeValue(document.querySelectorAll('input[type="text"]')[4]?.value),
+            branch_code: sanitizeValue(document.querySelectorAll('input[type="text"]')[5]?.value),
+            account_holder: sanitizeValue(document.querySelectorAll('input[type="text"]')[6]?.value),
+            account_number: sanitizeValue(document.querySelectorAll('input[type="text"]')[7]?.value),
+            account_type: sanitizeValue(document.querySelectorAll('input[type="text"]')[8]?.value)
         };
 
         localStorage.setItem('qoreFormData', JSON.stringify(formData));
+    }
+
+    // Helper function to prevent null values
+    function sanitizeValue(value) {
+        // Handle all null-like values including localStorage edge cases
+        // First check for actual null/undefined
+        if (value === null || value === undefined) {
+            return '';
+        }
+
+        // Convert to string for further checks
+        const stringValue = String(value);
+
+        // Check for string representations of null/undefined or empty strings
+        if (stringValue === 'null' || stringValue === 'undefined' || stringValue.trim() === '') {
+            return '';
+        }
+
+        return stringValue.trim();
     }
 
     // Validation functions
@@ -660,6 +706,178 @@
             input.setCustomValidity('');
             input.style.borderColor = '#ddd';
         }
+    }
+
+    // Validation functions for Page 2
+    function markRequiredFields() {
+        // Define required fields for Page 2
+        const requiredFields = [
+            'input[name="title"]', // Radio buttons for title
+            'input[type="text"]', // Full name (first text input)
+            '#date_of_birth',
+            '#identity_number',
+            'input[name="status"]', // Radio buttons for status
+            'input[type="email"]' // Personal email
+        ];
+
+        // Add data attributes to inputs for easier identification
+        const textInputs = document.querySelectorAll('input[type="text"]');
+        const fieldNames = ['full_name', 'identity_number', 'nationality', 'designation', 'bank_name', 'branch_name', 'branch_code', 'account_holder', 'account_number', 'account_type'];
+
+        textInputs.forEach((input, index) => {
+            if (fieldNames[index]) {
+                input.setAttribute('data-field', fieldNames[index]);
+            }
+        });
+
+        // Mark labels as required
+        const requiredLabels = [
+            'Full name', 'Date of birth', 'Identity number', 'Personal email address'
+        ];
+
+        document.querySelectorAll('label').forEach(label => {
+            if (requiredLabels.some(req => label.textContent.includes(req))) {
+                label.classList.add('required-label');
+            }
+        });
+    }
+
+    function validatePage2() {
+        const errors = [];
+
+        // Check title selection
+        const title = document.querySelector('select[name="title"]');
+        if (!title || !title.value || title.value.trim() === '') {
+            errors.push('Please select a title');
+            if (title) title.classList.add('required-field');
+        } else {
+            if (title) title.classList.remove('required-field');
+        }
+
+        // Check full name
+        const fullName = document.querySelector('input[type="text"]');
+        if (!fullName || !fullName.value || fullName.value.trim() === '') {
+            errors.push('Full name is required');
+            if (fullName) fullName.classList.add('required-field');
+        } else if (fullName) {
+            fullName.classList.remove('required-field');
+        }
+
+        // Check date of birth
+        const dateOfBirth = document.querySelector('#date_of_birth');
+        if (!dateOfBirth || !dateOfBirth.value || dateOfBirth.value.trim() === '') {
+            errors.push('Date of birth is required');
+            if (dateOfBirth) dateOfBirth.classList.add('required-field');
+        } else if (dateOfBirth) {
+            dateOfBirth.classList.remove('required-field');
+        }
+
+        // Check identity number
+        const identityNumber = document.querySelector('#identity_number');
+        if (!identityNumber || !identityNumber.value || identityNumber.value.trim() === '') {
+            errors.push('Identity number is required');
+            if (identityNumber) identityNumber.classList.add('required-field');
+        } else if (identityNumber) {
+            identityNumber.classList.remove('required-field');
+            // Validate ID number format
+            const idValue = identityNumber.value.replace(/\D/g, '');
+            if (idValue.length !== 13) {
+                errors.push('Identity number must be exactly 13 digits');
+                identityNumber.classList.add('required-field');
+            }
+        }
+
+        // Check status selection
+        const status = document.querySelector('select[name="status"]');
+        if (!status || !status.value || status.value.trim() === '') {
+            errors.push('Please select a marital status');
+            if (status) status.classList.add('required-field');
+        } else {
+            if (status) status.classList.remove('required-field');
+        }
+
+        // Check personal email
+        const personalEmail = document.querySelector('input[type="email"]');
+        if (!personalEmail || !personalEmail.value || personalEmail.value.trim() === '') {
+            errors.push('Personal email address is required');
+            if (personalEmail) personalEmail.classList.add('required-field');
+        } else if (personalEmail) {
+            personalEmail.classList.remove('required-field');
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(personalEmail.value)) {
+                errors.push('Please enter a valid email address');
+                personalEmail.classList.add('required-field');
+            }
+        }
+
+        // Validate phone numbers if provided
+        const mobileInputs = document.querySelectorAll('input[type="tel"]');
+        mobileInputs.forEach((input, index) => {
+            if (input.value && input.value.trim() !== '') {
+                const phoneValue = input.value.replace(/\D/g, '');
+                if (phoneValue.length !== 10) {
+                    errors.push(`${index === 0 ? 'Personal landline' : 'Personal mobile'} must be exactly 10 digits`);
+                    input.classList.add('required-field');
+                } else {
+                    input.classList.remove('required-field');
+                }
+            }
+        });
+
+        return errors;
+    }
+
+    function setupNextButtonValidation() {
+        const nextButton = document.querySelector('a[href="business-loan-form-page3.html"]');
+        if (nextButton) {
+            nextButton.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const errors = validatePage2();
+                if (errors.length > 0) {
+                    displayValidationErrors(errors);
+                    return false;
+                } else {
+                    hideValidationErrors();
+                    // Save data before navigation
+                    saveFormData();
+                    // Navigate to next page
+                    window.location.href = 'business-loan-form-page3.html';
+                }
+            });
+        }
+    }
+
+    function displayValidationErrors(errors) {
+        const validationSummary = document.querySelector('.validation-summary');
+        const errorList = validationSummary.querySelector('ul');
+
+        // Clear previous errors
+        errorList.innerHTML = '';
+
+        // Add new errors
+        errors.forEach(error => {
+            const li = document.createElement('li');
+            li.textContent = error;
+            errorList.appendChild(li);
+        });
+
+        // Show validation summary
+        validationSummary.classList.add('show');
+
+        // Scroll to validation summary
+        validationSummary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function hideValidationErrors() {
+        const validationSummary = document.querySelector('.validation-summary');
+        validationSummary.classList.remove('show');
+
+        // Remove required-field styling from all inputs
+        document.querySelectorAll('.required-field').forEach(field => {
+            field.classList.remove('required-field');
+        });
     }
 
     // Add event listeners for validation
@@ -696,40 +914,48 @@
     function loadFormData() {
         const savedData = JSON.parse(localStorage.getItem('qoreFormData') || '{}');
 
-        // Load radio button selections
-        if (savedData.title) {
-            const titleInputs = document.querySelectorAll('input[name="title"]');
-            titleInputs.forEach(input => {
-                if (input.nextElementSibling.textContent === savedData.title) {
-                    input.checked = true;
-                }
-            });
+        // Load dropdown selections with null prevention
+        if (savedData.title && savedData.title !== 'null' && savedData.title !== 'undefined') {
+            const titleSelect = document.querySelector('select[name="title"]');
+            if (titleSelect) {
+                titleSelect.value = sanitizeValue(savedData.title);
+            }
         }
 
-        if (savedData.status) {
-            const statusInputs = document.querySelectorAll('input[name="status"]');
-            statusInputs.forEach(input => {
-                if (input.nextElementSibling.textContent === savedData.status) {
-                    input.checked = true;
-                }
-            });
+        if (savedData.status && savedData.status !== 'null' && savedData.status !== 'undefined') {
+            const statusSelect = document.querySelector('select[name="status"]');
+            if (statusSelect) {
+                statusSelect.value = sanitizeValue(savedData.status);
+            }
         }
 
-        // Load text inputs
+        // Load text inputs with null prevention
         const inputs = document.querySelectorAll('input[placeholder=""]');
         const values = [
-            savedData.full_name, savedData.identity_number, savedData.nationality,
-            savedData.designation, savedData.personal_landline, savedData.personal_mobile,
-            savedData.personal_email, savedData.bank_name, savedData.branch_name,
-            savedData.branch_code, savedData.account_holder, savedData.account_number,
-            savedData.account_type
+            sanitizeValue(savedData.full_name), sanitizeValue(savedData.identity_number), sanitizeValue(savedData.nationality),
+            sanitizeValue(savedData.designation), sanitizeValue(savedData.personal_landline), sanitizeValue(savedData.personal_mobile),
+            sanitizeValue(savedData.personal_email), sanitizeValue(savedData.bank_name), sanitizeValue(savedData.branch_name),
+            sanitizeValue(savedData.branch_code), sanitizeValue(savedData.account_holder), sanitizeValue(savedData.account_number),
+            sanitizeValue(savedData.account_type)
         ];
 
         inputs.forEach((input, index) => {
-            if (values[index]) {
+            if (values[index] && values[index] !== '') {
                 input.value = values[index];
             }
         });
+
+        // Load date of birth field
+        const dateOfBirthInput = document.querySelector('#date_of_birth');
+        if (dateOfBirthInput && savedData.date_of_birth && savedData.date_of_birth !== 'null' && savedData.date_of_birth !== 'undefined') {
+            dateOfBirthInput.value = sanitizeValue(savedData.date_of_birth);
+        }
+
+        // Load identity number field
+        const identityInput = document.querySelector('#identity_number');
+        if (identityInput && savedData.identity_number && savedData.identity_number !== 'null' && savedData.identity_number !== 'undefined') {
+            identityInput.value = sanitizeValue(savedData.identity_number);
+        }
     }
     </script>
 </body>

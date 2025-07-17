@@ -286,10 +286,11 @@
         .signature-canvas {
             border: 2px solid #ddd;
             border-radius: 4px;
-            background-color: #f8f8f8;
+            background-color: white;
             cursor: crosshair;
             display: block;
             margin: 10px 0;
+            touch-action: none; /* Prevent scrolling on touch devices */
         }
 
         .signature-controls {
@@ -602,6 +603,16 @@
             // Save current page data first
             saveCurrentPageData();
 
+            // Auto-save all signatures before generating PDF
+            saveAllSignatures();
+
+            // Validate all form data before generating PDF
+            const validationErrors = validateAllFormData();
+            if (validationErrors.length > 0) {
+                displayValidationErrors(validationErrors);
+                return;
+            }
+
             // Get form data from all pages (stored in localStorage)
             const formData = getFormData();
 
@@ -629,17 +640,24 @@
         }
 
         function getFormData() {
-            // Get comprehensive data from localStorage
+            // Get comprehensive data from localStorage with null prevention
             const savedData = localStorage.getItem('qoreFormData');
             if (savedData) {
-                return JSON.parse(savedData);
+                const parsedData = JSON.parse(savedData);
+
+                // Sanitize all values to prevent null values
+                const sanitizedData = {};
+                for (const key in parsedData) {
+                    sanitizedData[key] = sanitizeValue(parsedData[key]);
+                }
+
+                return sanitizedData;
             }
 
             // If no saved data, return empty object with default structure
             return {
                 // Page 1 fields
                 loan_purpose: '',
-                others_specify: '',
                 loan_amount: '',
                 loan_period: '',
                 business_name: '',
@@ -671,7 +689,16 @@
                 branch_code: '',
                 account_holder: '',
                 account_number: '',
-                account_type: ''
+                account_type: '',
+
+                // Page 3 fields
+                signature_date_1: '',
+                signature_date_2: '',
+                signed_city_1: '',
+                signed_city_2: '',
+                signature1_signature: '',
+                signature2_signature: '',
+                signature3_signature: ''
             };
         }
 
@@ -788,11 +815,146 @@
         }
 
         function getFieldValue(value, defaultText = 'Not provided') {
-            // Helper function to ensure no field is left blank
-            if (!value || value.toString().trim() === '') {
+            // Helper function to ensure no field is left blank and prevent null values
+            if (value === null || value === undefined || value === 'null' || value === 'undefined' || !value || value.toString().trim() === '') {
                 return defaultText;
             }
-            return value.toString().trim();
+            return String(value).trim();
+        }
+
+        // Helper function to prevent null values in form data
+        function sanitizeValue(value) {
+            // Handle all null-like values including localStorage edge cases
+            // First check for actual null/undefined
+            if (value === null || value === undefined) {
+                return '';
+            }
+
+            // Convert to string for further checks
+            const stringValue = String(value);
+
+            // Check for string representations of null/undefined or empty strings
+            if (stringValue === 'null' || stringValue === 'undefined' || stringValue.trim() === '') {
+                return '';
+            }
+
+            return stringValue.trim();
+        }
+
+        // Comprehensive validation function for all form data
+        function validateAllFormData() {
+            const errors = [];
+            const formData = getFormData();
+
+            // Page 1 Required Fields
+            if (!formData.loan_purpose || formData.loan_purpose.trim() === '') {
+                errors.push('Loan purpose is required (Page 1)');
+            }
+            if (!formData.loan_amount || formData.loan_amount.trim() === '') {
+                errors.push('Loan amount is required (Page 1)');
+            } else {
+                const amount = parseFloat(formData.loan_amount.replace(/[^\d.]/g, ''));
+                if (isNaN(amount) || amount <= 0) {
+                    errors.push('Loan amount must be a valid positive number (Page 1)');
+                }
+            }
+            if (!formData.loan_period || formData.loan_period.trim() === '') {
+                errors.push('Loan period is required (Page 1)');
+            } else {
+                const period = parseInt(formData.loan_period);
+                if (isNaN(period) || period <= 0 || period > 60) {
+                    errors.push('Loan period must be between 1 and 60 days (Page 1)');
+                }
+            }
+            if (!formData.business_name || formData.business_name.trim() === '') {
+                errors.push('Business name is required (Page 1)');
+            }
+            if (!formData.registration_number || formData.registration_number.trim() === '') {
+                errors.push('Registration number is required (Page 1)');
+            }
+            if (!formData.office_address || formData.office_address.trim() === '') {
+                errors.push('Office address is required (Page 1)');
+            }
+            if (!formData.province || formData.province.trim() === '') {
+                errors.push('Province is required (Page 1)');
+            }
+            if (!formData.city || formData.city.trim() === '') {
+                errors.push('City is required (Page 1)');
+            }
+            if (!formData.mobile || formData.mobile.trim() === '') {
+                errors.push('Mobile number is required (Page 1)');
+            } else {
+                const mobileValue = formData.mobile.replace(/\D/g, '');
+                if (mobileValue.length !== 10) {
+                    errors.push('Mobile number must be exactly 10 digits (Page 1)');
+                }
+            }
+            if (!formData.business_email || formData.business_email.trim() === '') {
+                errors.push('Business email is required (Page 1)');
+            } else {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData.business_email)) {
+                    errors.push('Business email must be a valid email address (Page 1)');
+                }
+            }
+
+
+
+            // Page 2 Required Fields
+            if (!formData.title || formData.title.trim() === '') {
+                errors.push('Title is required (Page 2)');
+            }
+            if (!formData.full_name || formData.full_name.trim() === '') {
+                errors.push('Full name is required (Page 2)');
+            }
+            if (!formData.date_of_birth || formData.date_of_birth.trim() === '') {
+                errors.push('Date of birth is required (Page 2)');
+            }
+            if (!formData.identity_number || formData.identity_number.trim() === '') {
+                errors.push('Identity number is required (Page 2)');
+            } else {
+                const idValue = formData.identity_number.replace(/\D/g, '');
+                if (idValue.length !== 13) {
+                    errors.push('Identity number must be exactly 13 digits (Page 2)');
+                }
+            }
+            if (!formData.status || formData.status.trim() === '') {
+                errors.push('Marital status is required (Page 2)');
+            }
+            if (!formData.personal_email || formData.personal_email.trim() === '') {
+                errors.push('Personal email is required (Page 2)');
+            } else {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData.personal_email)) {
+                    errors.push('Personal email must be a valid email address (Page 2)');
+                }
+            }
+
+            // Validate phone numbers if provided
+            if (formData.personal_mobile && formData.personal_mobile.trim() !== '') {
+                const phoneValue = formData.personal_mobile.replace(/\D/g, '');
+                if (phoneValue.length !== 10) {
+                    errors.push('Personal mobile must be exactly 10 digits (Page 2)');
+                }
+            }
+            if (formData.personal_landline && formData.personal_landline.trim() !== '') {
+                const phoneValue = formData.personal_landline.replace(/\D/g, '');
+                if (phoneValue.length !== 10) {
+                    errors.push('Personal landline must be exactly 10 digits (Page 2)');
+                }
+            }
+
+            return errors;
+        }
+
+        function displayValidationErrors(errors) {
+            let errorMessage = 'Please complete the following required fields before downloading the PDF:\n\n';
+            errors.forEach((error, index) => {
+                errorMessage += `${index + 1}. ${error}\n`;
+            });
+            errorMessage += '\nPlease go back to the previous pages and complete all required fields.';
+
+            alert(errorMessage);
         }
 
         function addCompleteFormContentToPDF(doc, formData, base64Image) {
@@ -820,44 +982,9 @@
             doc.setFont(undefined, 'normal');
             doc.setFontSize(10);
 
-            doc.text('Purpose of loan:', 15, yPosition);
-            yPosition += 8;
-
-            // Show loan purpose options with proper selection
-            const loanPurposes = [
-                'Invoice Discounting', 'Payroll Funding', 'Expansion Finance',
-                'Bridging Finance', 'Purchase Order Finance', 'Equipment Acquisition Finance',
-                'Project Finance'
-            ];
-
-            let line1 = '';
-            let line2 = '';
-            let line3 = '';
-
-            loanPurposes.forEach((purpose, index) => {
-                const isSelected = formData.loan_purpose === purpose;
-                const checkbox = isSelected ? '☑' : '☐';
-                const text = `${checkbox} ${purpose}  `;
-
-                if (index < 3) {
-                    line1 += text;
-                } else if (index < 6) {
-                    line2 += text;
-                } else {
-                    line3 += text;
-                }
-            });
-
-            // Add "Others" option
-            const isOthersSelected = formData.loan_purpose === 'Others' || (formData.others_specify && formData.others_specify.trim() !== '');
-            const othersCheckbox = isOthersSelected ? '☑' : '☐';
-            line3 += `${othersCheckbox} Others: ${getFieldValue(formData.others_specify, 'N/A')}`;
-
-            doc.text(line1, 20, yPosition);
-            yPosition += 6;
-            doc.text(line2, 20, yPosition);
-            yPosition += 6;
-            doc.text(line3, 20, yPosition);
+            // Display selected loan purpose as text (dropdown field)
+            doc.text('Purpose of loan: ' + getFieldValue(formData.loan_purpose), 15, yPosition);
+            yPosition += 10;
 
             yPosition += 15;
             doc.text('Loan amount: R ' + getFieldValue(formData.loan_amount, '0'), 15, yPosition);
@@ -871,20 +998,9 @@
             doc.text('Business name: ' + getFieldValue(formData.business_name), 15, yPosition);
             yPosition += 10;
 
-            doc.text('Entity type:', 15, yPosition);
-            yPosition += 8;
-
-            // Show entity type options with proper selection
-            const entityTypes = ['Close Corporation', 'Private Company', 'Trust', 'Joint Venture'];
-            let entityLine = '';
-
-            entityTypes.forEach(type => {
-                const isSelected = formData.entity_type === type;
-                const checkbox = isSelected ? '☑' : '☐';
-                entityLine += `${checkbox} ${type}  `;
-            });
-
-            doc.text(entityLine, 20, yPosition);
+            // Display selected entity type as text (dropdown field)
+            doc.text('Entity type: ' + getFieldValue(formData.entity_type), 15, yPosition);
+            yPosition += 10;
 
             yPosition += 15;
             doc.text('Date of incorporation: ' + getFieldValue(formData.incorporation_date, 'DD/MM/YYYY'), 15, yPosition);
@@ -892,39 +1008,9 @@
             doc.text('Registration number: ' + getFieldValue(formData.registration_number), 15, yPosition);
             yPosition += 10;
 
-            doc.text('Business sector:', 15, yPosition);
-            yPosition += 8;
-
-            // Show business sector options with proper selection
-            const businessSectors = [
-                'Manufacturing', 'Retail', 'Services', 'Consulting',
-                'Hospitality', 'Logistics'
-            ];
-
-            let sectorLine1 = '';
-            let sectorLine2 = '';
-
-            businessSectors.forEach((sector, index) => {
-                const isSelected = formData.business_sector === sector;
-                const checkbox = isSelected ? '☑' : '☐';
-                const text = `${checkbox} ${sector}  `;
-
-                if (index < 4) {
-                    sectorLine1 += text;
-                } else {
-                    sectorLine2 += text;
-                }
-            });
-
-            // Add "Others" option
-            const isOthersSelected = formData.business_sector === 'Others' ||
-                                   (formData.business_sector && !businessSectors.includes(formData.business_sector));
-            const othersCheckbox = isOthersSelected ? '☑' : '☐';
-            sectorLine2 += `${othersCheckbox} Others: ${isOthersSelected ? getFieldValue(formData.business_sector, 'N/A') : 'N/A'}`;
-
-            doc.text(sectorLine1, 20, yPosition);
-            yPosition += 6;
-            doc.text(sectorLine2, 20, yPosition);
+            // Display selected business sector as text (dropdown field)
+            doc.text('Business sector: ' + getFieldValue(formData.business_sector), 15, yPosition);
+            yPosition += 10;
 
             yPosition += 15;
             doc.text('Office address: ' + getFieldValue(formData.office_address), 15, yPosition);
@@ -947,25 +1033,9 @@
             // Section 3: Personal Information
             yPosition = addSectionHeader(doc, yPosition, '3', 'PERSONAL INFORMATION');
 
-            doc.text('Title:', 15, yPosition);
-            yPosition += 8;
-
-            // Show checkboxes with proper selection
-            const titles = ['Mr.', 'Miss', 'Mrs.', 'Dr', 'Prof.'];
-            let titleText = '';
-            titles.forEach(title => {
-                const isSelected = formData.title === title;
-                titleText += (isSelected ? '☑' : '☐') + ' ' + title + '  ';
-            });
-
-            // Handle "Others" option
-            const isOthersTitle = formData.title && !titles.includes(formData.title);
-            const othersCheckbox = isOthersTitle ? '☑' : '☐';
-            const othersValue = isOthersTitle ? formData.title : '________';
-            titleText += `${othersCheckbox} Others: ${othersValue}`;
-
-            doc.text(titleText, 20, yPosition);
-            yPosition += 6;
+            // Display selected title as text (dropdown field)
+            doc.text('Title: ' + getFieldValue(formData.title), 15, yPosition);
+            yPosition += 10;
 
             yPosition += 15;
             doc.text('Full names and surname: ' + getFieldValue(formData.full_name), 15, yPosition);
@@ -982,18 +1052,9 @@
             doc.text('Date of birth: ' + dobText + '  Identity number: ' + getFieldValue(formData.identity_number), 15, yPosition);
             yPosition += 10;
 
-            doc.text('Status:', 15, yPosition);
-            yPosition += 8;
-
-            // Show status checkboxes with proper selection
-            const statuses = ['Single', 'Married', 'Divorced', 'Other'];
-            let statusText = '';
-            statuses.forEach(status => {
-                const isSelected = formData.status === status;
-                statusText += (isSelected ? '☑' : '☐') + ' ' + status + '  ';
-            });
-            doc.text(statusText, 20, yPosition);
-            yPosition += 6;
+            // Display selected status as text (dropdown field)
+            doc.text('Status: ' + getFieldValue(formData.status), 15, yPosition);
+            yPosition += 10;
 
             yPosition += 15;
             doc.text('Nationality: ' + getFieldValue(formData.nationality, 'N/A') + '  Designation/position: ' + getFieldValue(formData.designation, 'N/A'), 15, yPosition);
@@ -1183,22 +1244,39 @@
         let signaturePads = {};
 
         document.addEventListener('DOMContentLoaded', function() {
-            initializeSignaturePads();
+            console.log('DOM loaded, initializing signature pads...');
+            setTimeout(initializeSignaturePads, 100); // Small delay to ensure DOM is fully ready
         });
 
         function initializeSignaturePads() {
             const canvases = document.querySelectorAll('.signature-canvas');
+            console.log(`Found ${canvases.length} signature canvases`);
+
             canvases.forEach(canvas => {
+                console.log(`Initializing canvas: ${canvas.id}`);
                 const ctx = canvas.getContext('2d');
                 let isDrawing = false;
                 let lastX = 0;
                 let lastY = 0;
+
+                // Set canvas size properly - use HTML attributes if available
+                if (!canvas.width || canvas.width === 0) {
+                    canvas.width = canvas.getAttribute('width') || canvas.offsetWidth || 400;
+                }
+                if (!canvas.height || canvas.height === 0) {
+                    canvas.height = canvas.getAttribute('height') || canvas.offsetHeight || 100;
+                }
+                console.log(`Canvas ${canvas.id} size: ${canvas.width}x${canvas.height}`);
 
                 // Set up canvas
                 ctx.strokeStyle = '#000';
                 ctx.lineWidth = 2;
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
+
+                // Clear canvas to white background
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                 // Mouse events
                 canvas.addEventListener('mousedown', startDrawing);
@@ -1216,6 +1294,7 @@
                     const rect = canvas.getBoundingClientRect();
                     lastX = e.clientX - rect.left;
                     lastY = e.clientY - rect.top;
+                    console.log(`Started drawing at (${lastX}, ${lastY}) on canvas ${canvas.id}`);
                 }
 
                 function draw(e) {
@@ -1240,9 +1319,12 @@
 
                 function handleTouch(e) {
                     e.preventDefault();
-                    const touch = e.touches[0];
+                    e.stopPropagation();
+
+                    const touch = e.touches && e.touches[0] ? e.touches[0] : e.changedTouches[0];
 
                     if (e.type === 'touchstart') {
+                        console.log('Touch start');
                         startDrawing({
                             clientX: touch.clientX,
                             clientY: touch.clientY
@@ -1253,6 +1335,7 @@
                             clientY: touch.clientY
                         });
                     } else if (e.type === 'touchend') {
+                        console.log('Touch end');
                         stopDrawing();
                     }
                 }
@@ -1267,7 +1350,14 @@
         function clearSignature(canvasId) {
             const pad = signaturePads[canvasId];
             if (pad) {
+                // Clear the canvas
                 pad.ctx.clearRect(0, 0, pad.canvas.width, pad.canvas.height);
+                // Reset to white background
+                pad.ctx.fillStyle = 'white';
+                pad.ctx.fillRect(0, 0, pad.canvas.width, pad.canvas.height);
+                console.log(`Cleared signature: ${canvasId}`);
+            } else {
+                console.error(`Could not find signature pad: ${canvasId}`);
             }
         }
 
@@ -1280,19 +1370,65 @@
                 existingData[canvasId + '_signature'] = dataURL;
                 localStorage.setItem('qoreFormData', JSON.stringify(existingData));
 
+                console.log(`Saved signature: ${canvasId} (${dataURL.length} characters)`);
                 alert('Signature saved successfully!');
+            } else {
+                console.error(`Could not find signature pad: ${canvasId}`);
+                alert('Error: Could not save signature');
             }
         }
+
+        function saveAllSignatures() {
+            // Auto-save all signatures without showing alerts
+            Object.keys(signaturePads).forEach(canvasId => {
+                const pad = signaturePads[canvasId];
+                if (pad) {
+                    const dataURL = pad.canvas.toDataURL();
+                    const existingData = JSON.parse(localStorage.getItem('qoreFormData') || '{}');
+                    existingData[canvasId + '_signature'] = dataURL;
+                    localStorage.setItem('qoreFormData', JSON.stringify(existingData));
+                    console.log(`Auto-saved signature: ${canvasId}`);
+                }
+            });
+        }
+
+        // Test function to verify signature functionality
+        function testSignatureFunctionality() {
+            console.log('Testing signature functionality...');
+            console.log('Available signature pads:', Object.keys(signaturePads));
+
+            // Test drawing on first signature pad
+            const firstPadId = Object.keys(signaturePads)[0];
+            if (firstPadId) {
+                const pad = signaturePads[firstPadId];
+                const ctx = pad.ctx;
+
+                // Draw a test signature
+                ctx.strokeStyle = '#ff0000';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(50, 50);
+                ctx.lineTo(200, 30);
+                ctx.lineTo(350, 70);
+                ctx.stroke();
+
+                console.log(`Drew test signature on ${firstPadId}`);
+                alert(`Test signature drawn on ${firstPadId}. Try drawing with your mouse/finger now.`);
+            }
+        }
+
+        // Add test button functionality (for debugging)
+        window.testSignatureFunctionality = testSignatureFunctionality;
 
         function saveCurrentPageData() {
             // Save any data from current page (Page 3) that might not be auto-saved
             const existingData = JSON.parse(localStorage.getItem('qoreFormData') || '{}');
 
-            // Get signature date fields
-            const signatureDate1 = document.querySelector('input[name="signature_date_1"]')?.value || '';
-            const signatureDate2 = document.querySelector('input[name="signature_date_2"]')?.value || '';
-            const signedCity1 = document.querySelectorAll('.signature-input')[0]?.value || '';
-            const signedCity2 = document.querySelectorAll('.signature-input')[1]?.value || '';
+            // Get signature date fields with null prevention
+            const signatureDate1 = sanitizeValue(document.querySelector('input[name="signature_date_1"]')?.value);
+            const signatureDate2 = sanitizeValue(document.querySelector('input[name="signature_date_2"]')?.value);
+            const signedCity1 = sanitizeValue(document.querySelectorAll('.signature-input')[0]?.value);
+            const signedCity2 = sanitizeValue(document.querySelectorAll('.signature-input')[1]?.value);
 
             const updatedData = {
                 ...existingData,

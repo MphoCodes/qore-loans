@@ -121,10 +121,37 @@
             border-radius: 4px;
             font-size: 14px;
         }
-        
+
         input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #d2691e;
+        }
+
+        /* Required field styling */
+        .required-field {
+            border-color: #dc3545 !important;
+            background-color: #fff5f5;
+        }
+
+        .required-label::after {
+            content: " *";
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .validation-error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .validation-error.show {
+            display: block;
+        }
+
+        .form-group {
+            position: relative;
         }
         
         .date-group {
@@ -201,6 +228,30 @@
         .nav-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
+        }
+
+        .nav-btn.disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .validation-summary {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px;
+            display: none;
+        }
+
+        .validation-summary.show {
+            display: block;
+        }
+
+        .validation-summary ul {
+            margin: 10px 0 0 20px;
         }
 
         .continue-btn {
@@ -330,41 +381,24 @@
             <div class="section-content">
                 <div class="form-group">
                     <label>Purpose of loan</label>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="radio" id="invoice" name="loan_purpose">
-                            <label for="invoice">Invoice Discounting</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="payroll" name="loan_purpose">
-                            <label for="payroll">Payroll Funding</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="expansion" name="loan_purpose">
-                            <label for="expansion">Expansion Finance</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="bridging" name="loan_purpose">
-                            <label for="bridging">Bridging Finance</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="purchase" name="loan_purpose">
-                            <label for="purchase">Purchase Order Finance</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="equipment" name="loan_purpose">
-                            <label for="equipment">Equipment Acquisition Finance</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="project" name="loan_purpose">
-                            <label for="project">Project Finance</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="others" name="loan_purpose">
-                            <label for="others">Others, specify:</label>
-                        </div>
-                    </div>
-                    <input type="text" class="others-input" placeholder="">
+                    <select name="loan_purpose" id="loan_purpose" required>
+                        <option value="">-- Select loan purpose --</option>
+                        <option value="Invoice Discounting">Invoice Discounting</option>
+                        <option value="Payroll Funding">Payroll Funding</option>
+                        <option value="Expansion Finance">Expansion Finance</option>
+                        <option value="Bridging Finance">Bridging Finance</option>
+                        <option value="Purchase Order Finance">Purchase Order Finance</option>
+                        <option value="Equipment Acquisition Finance">Equipment Acquisition Finance</option>
+                        <option value="Project Finance">Project Finance</option>
+                        <option value="Working Capital">Working Capital</option>
+                        <option value="Stock Purchase">Stock Purchase</option>
+                        <option value="Debt Consolidation">Debt Consolidation</option>
+                        <option value="Business Acquisition">Business Acquisition</option>
+                        <option value="Marketing Campaign">Marketing Campaign</option>
+                        <option value="Seasonal Cash Flow">Seasonal Cash Flow</option>
+                        <option value="Emergency Funding">Emergency Funding</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
                 
                 <div class="form-row">
@@ -393,24 +427,17 @@
                 
                 <div class="form-group">
                     <label>Entity type</label>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="radio" id="close-corp" name="entity_type">
-                            <label for="close-corp">Close Corporation</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="private-company" name="entity_type">
-                            <label for="private-company">Private Company</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="trust" name="entity_type">
-                            <label for="trust">Trust</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="joint-venture" name="entity_type">
-                            <label for="joint-venture">Joint Venture</label>
-                        </div>
-                    </div>
+                    <select name="entity_type" id="entity_type" required>
+                        <option value="">-- Select entity type --</option>
+                        <option value="Close Corporation">Close Corporation</option>
+                        <option value="Private Company">Private Company</option>
+                        <option value="Trust">Trust</option>
+                        <option value="Joint Venture">Joint Venture</option>
+                        <option value="Sole Proprietorship">Sole Proprietorship</option>
+                        <option value="Partnership">Partnership</option>
+                        <option value="Public Company">Public Company</option>
+                        <option value="Non-Profit Organization">Non-Profit Organization</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -428,37 +455,29 @@
 
                 <div class="form-group">
                     <label>Business sector</label>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="radio" id="manufacturing" name="business_sector">
-                            <label for="manufacturing">Manufacturing</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="retail" name="business_sector">
-                            <label for="retail">Retail</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="services" name="business_sector">
-                            <label for="services">Services</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="consulting" name="business_sector">
-                            <label for="consulting">Consulting</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="hospitality" name="business_sector">
-                            <label for="hospitality">Hospitality</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="logistics" name="business_sector">
-                            <label for="logistics">Logistics</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" id="others-sector" name="business_sector">
-                            <label for="others-sector">Others, specify:</label>
-                        </div>
-                    </div>
-                    <input type="text" class="others-input" placeholder="">
+                    <select name="business_sector" id="business_sector" required>
+                        <option value="">-- Select business sector --</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Services">Services</option>
+                        <option value="Consulting">Consulting</option>
+                        <option value="Hospitality">Hospitality</option>
+                        <option value="Logistics">Logistics</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Education">Education</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Food & Beverage">Food & Beverage</option>
+                        <option value="Automotive">Automotive</option>
+                        <option value="Energy">Energy</option>
+                        <option value="Telecommunications">Telecommunications</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
@@ -520,6 +539,18 @@
         // Save data on input changes
         form.addEventListener('change', saveFormData);
         form.addEventListener('input', saveFormData);
+
+        // Add validation summary to the page
+        const validationSummary = document.createElement('div');
+        validationSummary.className = 'validation-summary';
+        validationSummary.innerHTML = '<h4>Please correct the following errors:</h4><ul></ul>';
+        form.insertBefore(validationSummary, form.querySelector('.navigation-buttons'));
+
+        // Mark required fields
+        markRequiredFields();
+
+        // Add validation to the Next button
+        setupNextButtonValidation();
     });
 
     function saveFormData() {
@@ -531,26 +562,196 @@
 
         const formData = {
             ...existingData,
-            // Page 1 data
-            loan_purpose: document.querySelector('input[name="loan_purpose"]:checked')?.nextElementSibling?.textContent?.trim() || '',
-            others_specify: document.querySelector('.others-input')?.value || '',
-            loan_amount: inputs[0]?.value || '',
-            loan_period: inputs[1]?.value || '',
-            business_name: inputs[2]?.value || '',
-            entity_type: document.querySelector('input[name="entity_type"]:checked')?.nextElementSibling?.textContent?.trim() || '',
-            incorporation_date: dateInput?.value || '',
-            registration_number: inputs[3]?.value || '',
-            business_sector: document.querySelector('input[name="business_sector"]:checked')?.nextElementSibling?.textContent?.trim() || '',
-            office_address: inputs[5]?.value || '',
-            province: inputs[6]?.value || '',
-            city: inputs[7]?.value || '',
-            postcode: inputs[8]?.value || '',
-            landline: inputs[9]?.value || '',
-            mobile: inputs[10]?.value || '',
-            business_email: inputs[11]?.value || ''
+            // Page 1 data with null prevention
+            loan_purpose: sanitizeValue(document.querySelector('select[name="loan_purpose"]')?.value),
+            loan_amount: sanitizeValue(inputs[0]?.value),
+            loan_period: sanitizeValue(inputs[1]?.value),
+            business_name: sanitizeValue(inputs[2]?.value),
+            entity_type: sanitizeValue(document.querySelector('select[name="entity_type"]')?.value),
+            incorporation_date: sanitizeValue(dateInput?.value),
+            registration_number: sanitizeValue(inputs[3]?.value),
+            business_sector: sanitizeValue(document.querySelector('select[name="business_sector"]')?.value),
+            office_address: sanitizeValue(inputs[4]?.value),
+            province: sanitizeValue(inputs[5]?.value),
+            city: sanitizeValue(inputs[6]?.value),
+            postcode: sanitizeValue(inputs[7]?.value),
+            landline: sanitizeValue(inputs[8]?.value),
+            mobile: sanitizeValue(inputs[9]?.value),
+            business_email: sanitizeValue(inputs[10]?.value)
         };
 
         localStorage.setItem('qoreFormData', JSON.stringify(formData));
+    }
+
+    // Helper function to prevent null values
+    function sanitizeValue(value) {
+        // Handle all null-like values including localStorage edge cases
+        // First check for actual null/undefined
+        if (value === null || value === undefined) {
+            return '';
+        }
+
+        // Convert to string for further checks
+        const stringValue = String(value);
+
+        // Check for string representations of null/undefined or empty strings
+        if (stringValue === 'null' || stringValue === 'undefined' || stringValue.trim() === '') {
+            return '';
+        }
+
+        return stringValue.trim();
+    }
+
+    // Validation functions
+    function markRequiredFields() {
+        // Define required fields for Page 1
+        const requiredFields = [
+            'input[name="loan_purpose"]', // Radio buttons for loan purpose
+            'input[placeholder=""][data-field="loan_amount"]',
+            'input[placeholder=""][data-field="loan_period"]',
+            'input[placeholder=""][data-field="business_name"]',
+            'input[placeholder=""][data-field="registration_number"]',
+            'input[placeholder=""][data-field="office_address"]',
+            'input[placeholder=""][data-field="province"]',
+            'input[placeholder=""][data-field="city"]',
+            'input[placeholder=""][data-field="mobile"]',
+            'input[type="email"]'
+        ];
+
+        // Add data attributes to inputs for easier identification
+        const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+        const fieldNames = ['loan_amount', 'loan_period', 'business_name', 'registration_number', 'office_address', 'province', 'city', 'postcode', 'landline', 'mobile', 'business_email'];
+
+        inputs.forEach((input, index) => {
+            if (fieldNames[index]) {
+                input.setAttribute('data-field', fieldNames[index]);
+            }
+        });
+
+        // Mark labels as required
+        const requiredLabels = [
+            'Loan amount', 'Loan period', 'Business name', 'Registration number',
+            'Office address', 'Province', 'City', 'Mobile', 'Email address'
+        ];
+
+        document.querySelectorAll('label').forEach(label => {
+            if (requiredLabels.some(req => label.textContent.includes(req))) {
+                label.classList.add('required-label');
+            }
+        });
+    }
+
+    function validatePage1() {
+        const errors = [];
+
+        // Check loan purpose selection
+        const loanPurpose = document.querySelector('select[name="loan_purpose"]');
+        if (!loanPurpose || !loanPurpose.value || loanPurpose.value.trim() === '') {
+            errors.push('Please select a reason for the loan');
+            if (loanPurpose) loanPurpose.classList.add('required-field');
+        } else {
+            if (loanPurpose) loanPurpose.classList.remove('required-field');
+        }
+
+        // Check required text fields using more reliable selectors
+        const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+        const fieldNames = ['loan_amount', 'loan_period', 'business_name', 'registration_number', 'office_address', 'province', 'city', 'postcode', 'landline', 'mobile', 'business_email'];
+        const requiredIndices = [0, 1, 2, 3, 4, 5, 6, 9, 10]; // Indices of required fields
+        const requiredNames = ['Loan amount', 'Loan period', 'Business name', 'Registration number', 'Office address', 'Province', 'City', 'Mobile number', 'Email address'];
+
+        requiredIndices.forEach((index, reqIndex) => {
+            const element = inputs[index];
+            if (element && (!element.value || element.value.trim() === '')) {
+                errors.push(`${requiredNames[reqIndex]} is required`);
+                element.classList.add('required-field');
+                // Also set data-field for consistency
+                element.setAttribute('data-field', fieldNames[index]);
+            } else if (element) {
+                element.classList.remove('required-field');
+                // Also set data-field for consistency
+                element.setAttribute('data-field', fieldNames[index]);
+            }
+        });
+
+        // Validate loan amount is numeric and positive
+        const loanAmount = inputs[0]; // First text input is loan amount
+        if (loanAmount && loanAmount.value && loanAmount.value.trim() !== '') {
+            const amount = parseFloat(loanAmount.value.replace(/[^\d.]/g, ''));
+            if (isNaN(amount) || amount <= 0) {
+                errors.push('Loan amount must be a valid positive number');
+                loanAmount.classList.add('required-field');
+            } else {
+                loanAmount.classList.remove('required-field');
+            }
+        }
+
+        // Validate loan period is numeric and within range
+        const loanPeriod = inputs[1]; // Second text input is loan period
+        if (loanPeriod && loanPeriod.value && loanPeriod.value.trim() !== '') {
+            const period = parseInt(loanPeriod.value);
+            if (isNaN(period) || period <= 0 || period > 60) {
+                errors.push('Loan period must be between 1 and 60 days');
+                loanPeriod.classList.add('required-field');
+            } else {
+                loanPeriod.classList.remove('required-field');
+            }
+        }
+
+
+
+        return errors;
+    }
+
+    function setupNextButtonValidation() {
+        const nextButton = document.querySelector('a[href="business-loan-form-page2.html"]');
+        if (nextButton) {
+            nextButton.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const errors = validatePage1();
+                if (errors.length > 0) {
+                    displayValidationErrors(errors);
+                    return false;
+                } else {
+                    hideValidationErrors();
+                    // Save data before navigation
+                    saveFormData();
+                    // Navigate to next page
+                    window.location.href = 'business-loan-form-page2.html';
+                }
+            });
+        }
+    }
+
+    function displayValidationErrors(errors) {
+        const validationSummary = document.querySelector('.validation-summary');
+        const errorList = validationSummary.querySelector('ul');
+
+        // Clear previous errors
+        errorList.innerHTML = '';
+
+        // Add new errors
+        errors.forEach(error => {
+            const li = document.createElement('li');
+            li.textContent = error;
+            errorList.appendChild(li);
+        });
+
+        // Show validation summary
+        validationSummary.classList.add('show');
+
+        // Scroll to validation summary
+        validationSummary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function hideValidationErrors() {
+        const validationSummary = document.querySelector('.validation-summary');
+        validationSummary.classList.remove('show');
+
+        // Remove required-field styling from all inputs
+        document.querySelectorAll('.required-field').forEach(field => {
+            field.classList.remove('required-field');
+        });
     }
 
     // Add validation for phone numbers
@@ -585,30 +786,52 @@
     function loadFormData() {
         const savedData = JSON.parse(localStorage.getItem('qoreFormData') || '{}');
 
-        // Load saved data back into form fields
-        if (savedData.loan_purpose) {
-            const purposeInputs = document.querySelectorAll('input[name="loan_purpose"]');
-            purposeInputs.forEach(input => {
-                if (input.nextElementSibling.textContent === savedData.loan_purpose) {
-                    input.checked = true;
-                }
-            });
+        // Load saved data back into form fields with null prevention
+        if (savedData.loan_purpose && savedData.loan_purpose !== 'null' && savedData.loan_purpose !== 'undefined') {
+            const loanPurposeSelect = document.querySelector('select[name="loan_purpose"]');
+            if (loanPurposeSelect) {
+                loanPurposeSelect.value = sanitizeValue(savedData.loan_purpose);
+            }
         }
 
-        // Load other fields...
+        // Load entity type
+        if (savedData.entity_type && savedData.entity_type !== 'null' && savedData.entity_type !== 'undefined') {
+            const entityTypeSelect = document.querySelector('select[name="entity_type"]');
+            if (entityTypeSelect) {
+                entityTypeSelect.value = sanitizeValue(savedData.entity_type);
+            }
+        }
+
+        // Load business sector
+        if (savedData.business_sector && savedData.business_sector !== 'null' && savedData.business_sector !== 'undefined') {
+            const businessSectorSelect = document.querySelector('select[name="business_sector"]');
+            if (businessSectorSelect) {
+                businessSectorSelect.value = sanitizeValue(savedData.business_sector);
+            }
+        }
+
+        // Load other fields with null prevention
         const inputs = document.querySelectorAll('input[placeholder=""]');
         const values = [
-            savedData.loan_amount, savedData.loan_period, savedData.business_name,
-            savedData.registration_number, savedData.office_address, savedData.province,
-            savedData.city, savedData.postcode, savedData.landline, savedData.mobile,
-            savedData.business_email
+            sanitizeValue(savedData.loan_amount), sanitizeValue(savedData.loan_period), sanitizeValue(savedData.business_name),
+            sanitizeValue(savedData.registration_number), sanitizeValue(savedData.office_address), sanitizeValue(savedData.province),
+            sanitizeValue(savedData.city), sanitizeValue(savedData.postcode), sanitizeValue(savedData.landline),
+            sanitizeValue(savedData.mobile), sanitizeValue(savedData.business_email)
         ];
 
         inputs.forEach((input, index) => {
-            if (values[index]) {
+            if (values[index] && values[index] !== '') {
                 input.value = values[index];
             }
         });
+
+        // Load date field
+        const dateInput = document.querySelector('#incorporation_date');
+        if (dateInput && savedData.incorporation_date && savedData.incorporation_date !== 'null' && savedData.incorporation_date !== 'undefined') {
+            dateInput.value = sanitizeValue(savedData.incorporation_date);
+        }
+
+
     }
     </script>
 </body>
