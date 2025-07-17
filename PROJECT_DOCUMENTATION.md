@@ -21,7 +21,7 @@ qore-loans/
 ├── business-loan-form.html          # Page 1: Reason for Loan & Business Details
 ├── business-loan-form-page2.html    # Page 2: Personal Info, Banking, Documents
 ├── business-loan-form-page3.html    # Page 3: Authorization, Signatures, PDF Download
-├── form_header.png                  # Original header image (CORS issues resolved)
+├── application_header.png           # Header image for all pages (CORS issues resolved)
 ├── qore-logo.png                   # Company logo
 └── PROJECT_DOCUMENTATION.md        # This documentation
 ```
@@ -95,7 +95,7 @@ qore-loans/
 ### Header Design
 ```css
 .header {
-    background-image: url('form_header.png');
+    background-image: url('application_header.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -221,7 +221,7 @@ function saveFormData() {
 ## 🐛 Known Issues & Solutions
 
 ### 1. CORS Error (RESOLVED)
-**Problem**: `form_header.png` blocked by CORS policy
+**Problem**: `application_header.png` blocked by CORS policy
 **Solution**: CSS-based header fallback in PDF generation
 
 ### 2. Data Mapping Issues (RESOLVED)

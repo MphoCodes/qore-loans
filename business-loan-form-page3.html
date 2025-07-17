@@ -25,7 +25,7 @@
         }
         
         .header {
-            background-image: url('form_header.png');
+            background-image: url('application_header.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -610,7 +610,7 @@
             const doc = new jsPDF();
 
             // Convert header image to base64 and add to PDF
-            convertImageToBase64('form_header.png', function(base64Image) {
+            convertImageToBase64('application_header.png', function(base64Image) {
                 // Add header image to first page
                 addHeaderImageToPDF(doc, base64Image);
 
