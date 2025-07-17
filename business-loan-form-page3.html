@@ -617,11 +617,14 @@
                 // Add all form content across multiple pages
                 addCompleteFormContentToPDF(doc, formData, base64Image);
 
+                // Generate filename with applicant name
+                const filename = generatePDFFilename(formData);
+
                 // Save the PDF
-                doc.save('Qore_Business_Loan_Application.pdf');
+                doc.save(filename);
 
                 // Show confirmation message
-                alert('Your application has been downloaded as a PDF. Please email the completed form to: applications@qore.co.za');
+                alert(`Your application has been downloaded as "${filename}". Please email the completed form to: applications@qore.co.za`);
             });
         }
 
@@ -673,12 +676,62 @@
         }
 
         function convertImageToBase64(imagePath, callback) {
-            // For local file system, use CSS-based header instead of image
-            console.warn('Using CSS fallback header due to CORS restrictions');
-            callback(null);
+            const img = new Image();
+            img.crossOrigin = 'anonymous'; // Handle CORS
+
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Set canvas dimensions to match image
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                // Draw image to canvas
+                ctx.drawImage(img, 0, 0);
+
+                // Convert to base64
+                try {
+                    const base64 = canvas.toDataURL('image/png');
+                    callback(base64);
+                } catch (error) {
+                    console.warn('Could not convert image to base64, using fallback header:', error);
+                    callback(null);
+                }
+            };
+
+            img.onerror = function() {
+                console.warn('Could not load header image, using fallback header');
+                callback(null);
+            };
+
+            // Try to load the image
+            img.src = imagePath;
         }
 
         function addHeaderImageToPDF(doc, base64Image) {
+            if (base64Image) {
+                // Use the actual header image if available
+                try {
+                    // Add the header image to span the full width of the page
+                    // The image will maintain its aspect ratio and fit the page width
+                    const imgWidth = 210; // Full page width (A4 width in mm)
+                    const imgHeight = 30; // Height that matches the original CSS header height
+
+                    doc.addImage(base64Image, 'PNG', 0, 0, imgWidth, imgHeight);
+                    console.log('Header image successfully added to PDF');
+                } catch (error) {
+                    console.warn('Failed to add header image to PDF, using fallback:', error);
+                    addFallbackHeader(doc);
+                }
+            } else {
+                // Fallback to CSS-based header design
+                console.log('No header image available, using fallback design');
+                addFallbackHeader(doc);
+            }
+        }
+
+        function addFallbackHeader(doc) {
             // Professional header design that matches the website
             // Orange gradient background
             doc.setFillColor(210, 105, 30);
@@ -700,6 +753,46 @@
             doc.setFontSize(18);
             doc.setFont(undefined, 'bold');
             doc.text('qore', 170, 18);
+        }
+
+        function generatePDFFilename(formData) {
+            // Get the applicant's full name from form data
+            let applicantName = '';
+
+            console.log('Form data for filename generation:', formData);
+
+            if (formData.full_name && formData.full_name.trim()) {
+                applicantName = formData.full_name.trim();
+                console.log('Using full_name:', applicantName);
+            } else if (formData.business_name && formData.business_name.trim()) {
+                // Fallback to business name if personal name is not available
+                applicantName = formData.business_name.trim();
+                console.log('Using business_name as fallback:', applicantName);
+            } else {
+                // Default fallback
+                applicantName = 'Applicant';
+                console.log('Using default name: Applicant');
+            }
+
+            // Clean the name for filename (remove special characters, replace spaces with underscores)
+            const cleanName = applicantName
+                .replace(/[^a-zA-Z0-9\s]/g, '') // Remove special characters
+                .replace(/\s+/g, '_') // Replace spaces with underscores
+                .substring(0, 50); // Limit length to 50 characters
+
+            // Generate filename: qore_loan_application_[name].pdf
+            const filename = `qore_loan_application_${cleanName}.pdf`;
+            console.log('Generated filename:', filename);
+
+            return filename;
+        }
+
+        function getFieldValue(value, defaultText = 'Not provided') {
+            // Helper function to ensure no field is left blank
+            if (!value || value.toString().trim() === '') {
+                return defaultText;
+            }
+            return value.toString().trim();
         }
 
         function addCompleteFormContentToPDF(doc, formData, base64Image) {
@@ -729,54 +822,118 @@
 
             doc.text('Purpose of loan:', 15, yPosition);
             yPosition += 8;
-            doc.text('☐ Invoice Discounting  ☐ Payroll Funding  ☐ Expansion Finance', 20, yPosition);
+
+            // Show loan purpose options with proper selection
+            const loanPurposes = [
+                'Invoice Discounting', 'Payroll Funding', 'Expansion Finance',
+                'Bridging Finance', 'Purchase Order Finance', 'Equipment Acquisition Finance',
+                'Project Finance'
+            ];
+
+            let line1 = '';
+            let line2 = '';
+            let line3 = '';
+
+            loanPurposes.forEach((purpose, index) => {
+                const isSelected = formData.loan_purpose === purpose;
+                const checkbox = isSelected ? '☑' : '☐';
+                const text = `${checkbox} ${purpose}  `;
+
+                if (index < 3) {
+                    line1 += text;
+                } else if (index < 6) {
+                    line2 += text;
+                } else {
+                    line3 += text;
+                }
+            });
+
+            // Add "Others" option
+            const isOthersSelected = formData.loan_purpose === 'Others' || (formData.others_specify && formData.others_specify.trim() !== '');
+            const othersCheckbox = isOthersSelected ? '☑' : '☐';
+            line3 += `${othersCheckbox} Others: ${getFieldValue(formData.others_specify, 'N/A')}`;
+
+            doc.text(line1, 20, yPosition);
             yPosition += 6;
-            doc.text('☐ Bridging Finance  ☐ Purchase Order Finance  ☐ Equipment Acquisition Finance', 20, yPosition);
+            doc.text(line2, 20, yPosition);
             yPosition += 6;
-            doc.text('☐ Project Finance  ☐ Others: ' + (formData.others_specify || '________________'), 20, yPosition);
-            yPosition += 6;
-            doc.text('Selected: ' + (formData.loan_purpose || '_________________'), 20, yPosition);
+            doc.text(line3, 20, yPosition);
 
             yPosition += 15;
-            doc.text('Loan amount: ' + (formData.loan_amount || '_________________'), 15, yPosition);
+            doc.text('Loan amount: R ' + getFieldValue(formData.loan_amount, '0'), 15, yPosition);
             yPosition += 10;
-            doc.text('Loan period (not exceeding 60 days): ' + (formData.loan_period || '_________________'), 15, yPosition);
+            doc.text('Loan period (not exceeding 60 days): ' + getFieldValue(formData.loan_period, '0') + ' days', 15, yPosition);
 
             // Section 2: Business Details
             yPosition += 20;
             yPosition = addSectionHeader(doc, yPosition, '2', 'BUSINESS DETAILS');
 
-            doc.text('Business name: ' + (formData.business_name || '_________________'), 15, yPosition);
+            doc.text('Business name: ' + getFieldValue(formData.business_name), 15, yPosition);
             yPosition += 10;
 
             doc.text('Entity type:', 15, yPosition);
             yPosition += 8;
-            doc.text('☐ Close Corporation  ☐ Private Company  ☐ Trust  ☐ Joint Venture', 20, yPosition);
-            yPosition += 6;
-            doc.text('Selected: ' + (formData.entity_type || '_________________'), 20, yPosition);
+
+            // Show entity type options with proper selection
+            const entityTypes = ['Close Corporation', 'Private Company', 'Trust', 'Joint Venture'];
+            let entityLine = '';
+
+            entityTypes.forEach(type => {
+                const isSelected = formData.entity_type === type;
+                const checkbox = isSelected ? '☑' : '☐';
+                entityLine += `${checkbox} ${type}  `;
+            });
+
+            doc.text(entityLine, 20, yPosition);
 
             yPosition += 15;
-            doc.text('Date of incorporation: ' + (formData.incorporation_date || 'DD/MM/YYYY'), 15, yPosition);
+            doc.text('Date of incorporation: ' + getFieldValue(formData.incorporation_date, 'DD/MM/YYYY'), 15, yPosition);
             yPosition += 10;
-            doc.text('Registration number: ' + (formData.registration_number || '_________________'), 15, yPosition);
+            doc.text('Registration number: ' + getFieldValue(formData.registration_number), 15, yPosition);
             yPosition += 10;
 
             doc.text('Business sector:', 15, yPosition);
             yPosition += 8;
-            doc.text('☐ Manufacturing  ☐ Retail  ☐ Services  ☐ Consulting', 20, yPosition);
+
+            // Show business sector options with proper selection
+            const businessSectors = [
+                'Manufacturing', 'Retail', 'Services', 'Consulting',
+                'Hospitality', 'Logistics'
+            ];
+
+            let sectorLine1 = '';
+            let sectorLine2 = '';
+
+            businessSectors.forEach((sector, index) => {
+                const isSelected = formData.business_sector === sector;
+                const checkbox = isSelected ? '☑' : '☐';
+                const text = `${checkbox} ${sector}  `;
+
+                if (index < 4) {
+                    sectorLine1 += text;
+                } else {
+                    sectorLine2 += text;
+                }
+            });
+
+            // Add "Others" option
+            const isOthersSelected = formData.business_sector === 'Others' ||
+                                   (formData.business_sector && !businessSectors.includes(formData.business_sector));
+            const othersCheckbox = isOthersSelected ? '☑' : '☐';
+            sectorLine2 += `${othersCheckbox} Others: ${isOthersSelected ? getFieldValue(formData.business_sector, 'N/A') : 'N/A'}`;
+
+            doc.text(sectorLine1, 20, yPosition);
             yPosition += 6;
-            doc.text('☐ Hospitality  ☐ Logistics  ☐ Others: ________________', 20, yPosition);
-            yPosition += 6;
-            doc.text('Selected: ' + (formData.business_sector || '_________________'), 20, yPosition);
+            doc.text(sectorLine2, 20, yPosition);
 
             yPosition += 15;
-            doc.text('Office address: ' + (formData.office_address || '_________________'), 15, yPosition);
+            doc.text('Office address: ' + getFieldValue(formData.office_address), 15, yPosition);
             yPosition += 10;
-            doc.text('Province: ' + (formData.province || '________') + '  City: ' + (formData.city || '________') + '  Postcode: ' + (formData.postcode || '________'), 15, yPosition);
+            doc.text('Province: ' + getFieldValue(formData.province, 'N/A') + '  City: ' + getFieldValue(formData.city, 'N/A') + '  Postcode: ' + getFieldValue(formData.postcode, 'N/A'), 15, yPosition);
             yPosition += 10;
-            doc.text('Landline: ' + (formData.landline || '________') + '  Mobile: ' + (formData.mobile || '________'), 15, yPosition);
+            doc.text('Landline: ' + getFieldValue(formData.landline, 'N/A') + '  Mobile: ' + getFieldValue(formData.mobile, 'N/A'), 15, yPosition);
             yPosition += 10;
-            doc.text('Email address: ' + (formData.business_email || '_________________'), 15, yPosition);
+            doc.text('Email address: ' + getFieldValue(formData.business_email), 15, yPosition);
 
             // Page number for Page 1
             doc.setFontSize(10);
@@ -800,23 +957,29 @@
                 const isSelected = formData.title === title;
                 titleText += (isSelected ? '☑' : '☐') + ' ' + title + '  ';
             });
-            titleText += '☐ Others: ________';
+
+            // Handle "Others" option
+            const isOthersTitle = formData.title && !titles.includes(formData.title);
+            const othersCheckbox = isOthersTitle ? '☑' : '☐';
+            const othersValue = isOthersTitle ? formData.title : '________';
+            titleText += `${othersCheckbox} Others: ${othersValue}`;
+
             doc.text(titleText, 20, yPosition);
             yPosition += 6;
 
             yPosition += 15;
-            doc.text('Full names and surname: ' + (formData.full_name || '_________________'), 15, yPosition);
+            doc.text('Full names and surname: ' + getFieldValue(formData.full_name), 15, yPosition);
             yPosition += 10;
 
             // Format date properly
-            let dobText = formData.date_of_birth || 'DD/MM/YYYY';
+            let dobText = getFieldValue(formData.date_of_birth, 'DD/MM/YYYY');
             if (formData.date_of_birth && formData.date_of_birth.includes('-')) {
                 // Convert from YYYY-MM-DD to DD/MM/YYYY
                 const parts = formData.date_of_birth.split('-');
                 dobText = parts[2] + '/' + parts[1] + '/' + parts[0];
             }
 
-            doc.text('Date of birth: ' + dobText + '  Identity number: ' + (formData.identity_number || '_________________'), 15, yPosition);
+            doc.text('Date of birth: ' + dobText + '  Identity number: ' + getFieldValue(formData.identity_number), 15, yPosition);
             yPosition += 10;
 
             doc.text('Status:', 15, yPosition);
@@ -833,23 +996,23 @@
             yPosition += 6;
 
             yPosition += 15;
-            doc.text('Nationality: ' + (formData.nationality || '________') + '  Designation/position: ' + (formData.designation || '________'), 15, yPosition);
+            doc.text('Nationality: ' + getFieldValue(formData.nationality, 'N/A') + '  Designation/position: ' + getFieldValue(formData.designation, 'N/A'), 15, yPosition);
             yPosition += 10;
-            doc.text('Landline: ' + (formData.personal_landline || '________') + '  Mobile: ' + (formData.personal_mobile || '________'), 15, yPosition);
+            doc.text('Landline: ' + getFieldValue(formData.personal_landline, 'N/A') + '  Mobile: ' + getFieldValue(formData.personal_mobile, 'N/A'), 15, yPosition);
             yPosition += 10;
-            doc.text('E-mail address: ' + (formData.personal_email || '_________________'), 15, yPosition);
+            doc.text('E-mail address: ' + getFieldValue(formData.personal_email), 15, yPosition);
 
             // Section 4: Business Banking Details
             yPosition += 20;
             yPosition = addSectionHeader(doc, yPosition, '4', 'BUSINESS BANKING DETAILS');
 
-            doc.text('Bank name: ' + (formData.bank_name || '_________________'), 15, yPosition);
+            doc.text('Bank name: ' + getFieldValue(formData.bank_name), 15, yPosition);
             yPosition += 10;
-            doc.text('Branch name: ' + (formData.branch_name || '________') + '  Branch code: ' + (formData.branch_code || '________'), 15, yPosition);
+            doc.text('Branch name: ' + getFieldValue(formData.branch_name, 'N/A') + '  Branch code: ' + getFieldValue(formData.branch_code, 'N/A'), 15, yPosition);
             yPosition += 10;
-            doc.text('Account holder: ' + (formData.account_holder || '_________________'), 15, yPosition);
+            doc.text('Account holder: ' + getFieldValue(formData.account_holder), 15, yPosition);
             yPosition += 10;
-            doc.text('Account number: ' + (formData.account_number || '________') + '  Account type: ' + (formData.account_type || '________'), 15, yPosition);
+            doc.text('Account number: ' + getFieldValue(formData.account_number, 'N/A') + '  Account type: ' + getFieldValue(formData.account_type, 'N/A'), 15, yPosition);
 
             // Section 5: Statutory Documents
             yPosition += 20;
@@ -915,7 +1078,19 @@
             yPosition += splitAuthText.length * 5 + 20;
 
             // Signature fields
-            doc.text('Signed in: ________________ on this _______ of ________________ 20____', 15, yPosition);
+            const signedCity1 = getFieldValue(formData.signed_city_1, '________________');
+            const signatureDate1 = getFieldValue(formData.signature_date_1, '_______ of ________________ 20____');
+
+            // Format date if provided
+            let formattedDate1 = signatureDate1;
+            if (formData.signature_date_1 && formData.signature_date_1.includes('-')) {
+                const parts = formData.signature_date_1.split('-');
+                const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+                formattedDate1 = `${parts[2]} of ${months[parseInt(parts[1]) - 1]} ${parts[0]}`;
+            }
+
+            doc.text(`Signed in: ${signedCity1} on this ${formattedDate1}`, 15, yPosition);
             yPosition += 15;
 
             // Add signature image if available
@@ -934,7 +1109,19 @@
                 yPosition += 15;
             }
 
-            doc.text('Signed in: ________________ on this _______ of ________________ 20____', 15, yPosition);
+            const signedCity2 = getFieldValue(formData.signed_city_2, '________________');
+            const signatureDate2 = getFieldValue(formData.signature_date_2, '_______ of ________________ 20____');
+
+            // Format date if provided
+            let formattedDate2 = signatureDate2;
+            if (formData.signature_date_2 && formData.signature_date_2.includes('-')) {
+                const parts = formData.signature_date_2.split('-');
+                const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+                formattedDate2 = `${parts[2]} of ${months[parseInt(parts[1]) - 1]} ${parts[0]}`;
+            }
+
+            doc.text(`Signed in: ${signedCity2} on this ${formattedDate2}`, 15, yPosition);
             yPosition += 15;
 
             // Co-applicant signatures
