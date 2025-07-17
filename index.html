@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qore Business Loan Application</title>
+    <meta http-equiv="refresh" content="0; url=business-loan-form.html">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .redirect-container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+        }
+        .logo {
+            margin-bottom: 20px;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #d2691e;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .redirect-link {
+            color: #d2691e;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .redirect-link:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="redirect-container">
+        <div class="logo">
+            <img src="qore-logo.png" alt="Qore Logo" style="max-height: 60px;" onerror="this.style.display='none'">
+        </div>
+        
+        <h1>Qore Business Loan Application</h1>
+        
+        <div class="spinner"></div>
+        
+        <p>Redirecting you to the loan application form...</p>
+        
+        <p>If you're not automatically redirected, please <a href="business-loan-form.html" class="redirect-link">click here to continue</a>.</p>
+        
+        <script>
+            // Fallback redirect in case meta refresh doesn't work
+            setTimeout(function() {
+                window.location.href = 'business-loan-form.html';
+            }, 1000);
+        </script>
+    </div>
+</body>
+</html>
